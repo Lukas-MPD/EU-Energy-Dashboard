@@ -66,7 +66,7 @@ gdp_df = get_gdp_data()
 '''
 # :electric_plug: Energy in th EU :flag-eu:
 
-In Future: Browse energy data from the [eurostat Database](https://ec.europa.eu/eurostat/data/database).
+In Future: Browse energy data from the [eurostat Database](https://ec.europa.eu/eurostat/data/database). This data is updated quarterly by eurostat and queried via API.
 
 For now it's still GDP data from the [World Bank Open Data](https://data.worldbank.org/).
 '''
