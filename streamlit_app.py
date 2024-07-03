@@ -64,7 +64,7 @@ gdp_df = get_gdp_data()
 
 # Set the title that appears at the top of the page.
 '''
-# :electric_plug: Energy in th EU :eu:
+# :electric_plug: Energy in th EU :european_union:
 
 In Future: Browse energy data from the [eurostat Database](https://ec.europa.eu/eurostat/data/database).
 
