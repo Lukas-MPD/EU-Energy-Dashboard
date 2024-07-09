@@ -82,12 +82,9 @@ col1, col2 = st.columns(2)
 # Add content to the first column
 with col1:
     st.header("Column 1")
-    st.write("This is content in the first column.")
+    st.write(
 
-# Add content to the second column
-with col2:
-    st.header("Column 2")
-    st.write("This is content in the second column.")
+
 
 min_value = gdp_df['Year'].min()
 max_value = gdp_df['Year'].max()
@@ -163,3 +160,9 @@ for i, country in enumerate(selected_countries):
             delta=growth,
             delta_color=delta_color
         )
+)
+
+# Add content to the second column
+with col2:
+    st.header("Column 2")
+    st.write("This is content in the second column.")
