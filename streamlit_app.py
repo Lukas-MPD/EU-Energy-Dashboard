@@ -82,6 +82,9 @@ def get_eust_data():
     
     # Flatten the columns after pivoting
     df_pivoted.columns.name = None
+
+    # Convert year_month to timestamps (seconds since epoch)
+    df_pivoted['timestamp'] = pd.to_datetime(df_pivoted['year_month'])
     
     # Display the transformed dataframe
     return df_pivoted
@@ -190,14 +193,17 @@ with col2:
     st.header("Energy-Contet-Test")
     eust_df = get_eust_data()
 
-    min_value = eust_df['year_month'].min()
-    max_value = eust_df['year_month'].max()
+    # Set up the Streamlit slider
+    from_date, to_date = st.slider(
+        'Which dates are you interested in?',
+        min_value=eust_df['timestamp'].min(),
+        max_value=eust_df['timestamp'].max(),
+        value=[eust_df['timestamp'].min(), eust_df['timestamp'].max()],
+        format="YYYY-MM-DD"
+    )
     
-    from_year, to_year = st.slider(
-        'Which years are you interested in?',
-        min_value=min_value,
-        max_value=max_value,
-        value=[min_value, max_value])
+    # Display the selected dates
+    st.write(f'From date: {from_date.date()} to date: {to_date.date()}')
 
     st.line_chart(eust_df, x='year_month', y='C0000_GWH',color='geo')
     
