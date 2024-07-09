@@ -193,15 +193,17 @@ with col2:
     st.header("Energy-Contet-Test")
     eust_df = get_eust_data()
 
-    date_min = eust_df['timestamp'].min()
-    date_max = eust_df['timestamp'].max()
+    min_date = eust_df['timestamp'].min()
+    max_date = eust_df['timestamp'].max()
 
     st.write(f'From date: {date_min} to date: {date_max}')
 
     # Set up the Streamlit slider
     from_date, to_date = st.slider(
         'Which dates are you interested in?',
-        value=(eust_df['timestamp'].min(), eust_df['timestamp'].max())
+        min_value = min_date,
+        max_value = max_date,
+        value=(min_date, max_date)
     )
     
     # Display the selected dates
