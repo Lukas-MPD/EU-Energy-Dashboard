@@ -190,5 +190,14 @@ with col2:
     st.header("Energy-Contet-Test")
     eust_df = get_eust_data()
 
+    min_value = eust_df['year_month'].min()
+    max_value = eust_df['year_month'].max()
+    
+    from_year, to_year = st.slider(
+        'Which years are you interested in?',
+        min_value=min_value,
+        max_value=max_value,
+        value=[min_value, max_value])
+
     st.line_chart(eust_df, x='year_month', y='C0000_GWH',color='geo')
     
