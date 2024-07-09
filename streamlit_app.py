@@ -211,9 +211,25 @@ with col2:
         format="YYYY-MM"
     )
 
+    countries = eust_df['geo'].unique()
+    
+    if not len(countries):
+        st.warning("Select at least one country")
+    
+    selected_countries = st.multiselect(
+        'Which countries would you like to view?',
+        countries,
+        ['CZ', 'FR', 'ES', 'DE'])
+
+    # Filter the data
+    filtered_eust_df = eust_df[
+        (eust_df['geo'].isin(selected_countries))
+        & (eust_df['year_month'] <= to_date)
+        & (from_date <= eust_df['year_month'])
+    ]
 
     # Display the selected dates
     #st.write(f'From date: {from_date} to date: {to_date}')
 
-    st.line_chart(eust_df, x='year_month', y='C0000_GWH',color='geo')
+    st.line_chart(filtered_eust_df, x='year_month', y='C0000_GWH',color='geo')
     
