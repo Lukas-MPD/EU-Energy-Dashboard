@@ -135,52 +135,6 @@ with st.sidebar:
 # Add content to the first column
 with col1:
     st.header("OLD GDP-stuff")
-    gdp_df = get_gdp_data()
-
-    min_value = gdp_df['Year'].min()
-    max_value = gdp_df['Year'].max()
-    
-    from_year, to_year = st.slider(
-        'Which years are you interested in?',
-        min_value=min_value,
-        max_value=max_value,
-        value=[min_value, max_value])
-    
-    countries = gdp_df['Country Code'].unique()
-    
-    if not len(countries):
-        st.warning("Select at least one country")
-    
-    selected_countries = st.multiselect(
-        'Which countries would you like to view?',
-        countries,
-        ['DEU', 'FRA', 'GBR', 'BRA', 'MEX', 'JPN'])
-    
-    ''
-    ''
-    ''
-    
-    # Filter the data
-    filtered_gdp_df = gdp_df[
-        (gdp_df['Country Code'].isin(selected_countries))
-        & (gdp_df['Year'] <= to_year)
-        & (from_year <= gdp_df['Year'])
-    ]
-    
-    st.header('GDP over time', divider='gray')
-    
-    ''
-    
-    st.line_chart(
-        filtered_gdp_df,
-        x='Year',
-        y='GDP',
-        color='Country Code',
-    )
-    
-    ''
-    ''
-    
     
     first_year = gdp_df[gdp_df['Year'] == from_year]
     last_year = gdp_df[gdp_df['Year'] == to_year]
