@@ -59,7 +59,7 @@ def get_gdp_data():
 
     return gdp_df
 
-@st.cache_data
+# @st.cache_data
 def get_eust_data():
     data = eust.get_data_df('nrg_cb_pem')
 
@@ -85,6 +85,9 @@ def get_eust_data():
 
     # Convert year_month to timestamps (seconds since epoch)
     df_pivoted['timestamp'] = pd.to_datetime(df_pivoted['year_month'])
+    
+    # Apply lambda function to convert Timestamp objects to Unix timestamps
+    df_pivoted['unix_timestamp'] = df_pivoted['timestamp'].apply(lambda x: x.timestamp())
     
     # Display the transformed dataframe
     return df_pivoted
@@ -196,9 +199,9 @@ with col2:
     # Set up the Streamlit slider
     from_date, to_date = st.slider(
         'Which dates are you interested in?',
-        min_value=eust_df['timestamp'].min(),
-        max_value=eust_df['timestamp'].max(),
-        value=[eust_df['timestamp'].min(), eust_df['timestamp'].max()],
+        min_value=eust_df['unix_timestamp'].min(),
+        max_value=eust_df['unix_timestamp'].max(),
+        value=[eust_df['unix_timestamp'].min(), eust_df['unix_timestamp'].max()],
         format="YYYY-MM-DD"
     )
     
