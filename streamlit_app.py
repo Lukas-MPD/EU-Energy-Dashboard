@@ -199,14 +199,11 @@ with col2:
     # Set up the Streamlit slider
     from_date, to_date = st.slider(
         'Which dates are you interested in?',
-        min_value=eust_df['unix_timestamp'].min(),
-        max_value=eust_df['unix_timestamp'].max(),
-        value=[eust_df['unix_timestamp'].min(), eust_df['unix_timestamp'].max()],
-        format="YYYY-MM-DD"
+        value=(time(11, 30), time(12, 45))
     )
     
     # Display the selected dates
-    st.write(f'From date: {from_date} to date: {to_date}')
+    #st.write(f'From date: {from_date} to date: {to_date}')
 
     st.line_chart(eust_df, x='year_month', y='C0000_GWH',color='geo')
     
