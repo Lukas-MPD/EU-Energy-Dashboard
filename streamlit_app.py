@@ -110,7 +110,7 @@ For now it's still GDP data from the [World Bank Open Data](https://data.worldba
 
 # Create two columns
 col1, col2 = st.columns(2)
-eust_df = get_eust_data()
+df_eust = get_eust_data()
 # Add content to the first column
 with col1:
     st.header("OLD GDP-stuff")
@@ -195,36 +195,36 @@ with col1:
 with col2:
     st.header("Energy-Contet-Test")
 
-    #min_date = eust_df['timestamp'].min()
-    #max_date = eust_df['timestamp'].max()
+    #min_date = df_eust['timestamp'].min()
+    #max_date = df_eust['timestamp'].max()
 
     # st.write(f'From date: {min_date} to date: {max_date}')
-    # st.write(eust_df)
+    # st.write(df_eust)
 
 
     # Filter the data
-    filtered_eust_df = eust_df[
-        (eust_df['geo'].isin(selected_countries))
-        & (eust_df['year_month'] <= to_date)
-        & (from_date <= eust_df['year_month'])
+    filtered_df_eust = df_eust[
+        (df_eust['geo'].isin(selected_countries))
+        & (df_eust['year_month'] <= to_date)
+        & (from_date <= df_eust['year_month'])
     ]
 
     # Display the selected dates
     #st.write(f'From date: {from_date} to date: {to_date}')
 
-    st.line_chart(filtered_eust_df, x='year_month', y='C0000_GWH',color='geo')
+    st.line_chart(filtered_df_eust, x='year_month', y='C0000_GWH',color='geo')
     
 with st.sidebar:
 
     from_date, to_date = st.slider(
         'Which dates are you interested in?',
-        min_value=min(eust_df['year_month']),
-        max_value=max(eust_df['year_month']),
-        value=(min(eust_df['year_month']), max(eust_df['year_month'])),
+        min_value=min(df_eust['year_month']),
+        max_value=max(df_eust['year_month']),
+        value=(min(df_eust['year_month']), max(df_eust['year_month'])),
         format="YYYY-MM"
     )
 
-    countries = eust_df['geo'].unique()
+    countries = df_eust['geo'].unique()
     
     if not len(countries):
         st.warning("Select at least one country")
