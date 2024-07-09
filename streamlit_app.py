@@ -81,86 +81,82 @@ col1, col2 = st.columns(2)
 # Add content to the first column
 with col1:
     st.header("Column 1")
-    st.write(
+    gdp_df = get_gdp_data()
 
-        
-        gdp_df = get_gdp_data()
-
-        min_value = gdp_df['Year'].min()
-        max_value = gdp_df['Year'].max()
-        
-        from_year, to_year = st.slider(
-            'Which years are you interested in?',
-            min_value=min_value,
-            max_value=max_value,
-            value=[min_value, max_value])
-        
-        countries = gdp_df['Country Code'].unique()
-        
-        if not len(countries):
-            st.warning("Select at least one country")
-        
-        selected_countries = st.multiselect(
-            'Which countries would you like to view?',
-            countries,
-            ['DEU', 'FRA', 'GBR', 'BRA', 'MEX', 'JPN'])
-        
-        ''
-        ''
-        ''
-        
-        # Filter the data
-        filtered_gdp_df = gdp_df[
-            (gdp_df['Country Code'].isin(selected_countries))
-            & (gdp_df['Year'] <= to_year)
-            & (from_year <= gdp_df['Year'])
-        ]
-        
-        st.header('GDP over time', divider='gray')
-        
-        ''
-        
-        st.line_chart(
-            filtered_gdp_df,
-            x='Year',
-            y='GDP',
-            color='Country Code',
-        )
-        
-        ''
-        ''
-        
-        
-        first_year = gdp_df[gdp_df['Year'] == from_year]
-        last_year = gdp_df[gdp_df['Year'] == to_year]
-        
-        st.header(f'GDP in {to_year}', divider='gray')
-        
-        ''
-        
-        cols = st.columns(4)
-        
-        for i, country in enumerate(selected_countries):
-            col = cols[i % len(cols)]
-        
-            with col:
-                first_gdp = first_year[gdp_df['Country Code'] == country]['GDP'].iat[0] / 1000000000
-                last_gdp = last_year[gdp_df['Country Code'] == country]['GDP'].iat[0] / 1000000000
-        
-                if math.isnan(first_gdp):
-                    growth = 'n/a'
-                    delta_color = 'off'
-                else:
-                    growth = f'{last_gdp / first_gdp:,.2f}x'
-                    delta_color = 'normal'
-        
-                st.metric(
-                    label=f'{country} GDP',
-                    value=f'{last_gdp:,.0f}B',
-                    delta=growth,
-                    delta_color=delta_color
-                )
-        )
+    min_value = gdp_df['Year'].min()
+    max_value = gdp_df['Year'].max()
+    
+    from_year, to_year = st.slider(
+        'Which years are you interested in?',
+        min_value=min_value,
+        max_value=max_value,
+        value=[min_value, max_value])
+    
+    countries = gdp_df['Country Code'].unique()
+    
+    if not len(countries):
+        st.warning("Select at least one country")
+    
+    selected_countries = st.multiselect(
+        'Which countries would you like to view?',
+        countries,
+        ['DEU', 'FRA', 'GBR', 'BRA', 'MEX', 'JPN'])
+    
+    ''
+    ''
+    ''
+    
+    # Filter the data
+    filtered_gdp_df = gdp_df[
+        (gdp_df['Country Code'].isin(selected_countries))
+        & (gdp_df['Year'] <= to_year)
+        & (from_year <= gdp_df['Year'])
+    ]
+    
+    st.header('GDP over time', divider='gray')
+    
+    ''
+    
+    st.line_chart(
+        filtered_gdp_df,
+        x='Year',
+        y='GDP',
+        color='Country Code',
+    )
+    
+    ''
+    ''
+    
+    
+    first_year = gdp_df[gdp_df['Year'] == from_year]
+    last_year = gdp_df[gdp_df['Year'] == to_year]
+    
+    st.header(f'GDP in {to_year}', divider='gray')
+    
+    ''
+    
+    cols = st.columns(4)
+    
+    for i, country in enumerate(selected_countries):
+        col = cols[i % len(cols)]
+    
+        with col:
+            first_gdp = first_year[gdp_df['Country Code'] == country]['GDP'].iat[0] / 1000000000
+            last_gdp = last_year[gdp_df['Country Code'] == country]['GDP'].iat[0] / 1000000000
+    
+            if math.isnan(first_gdp):
+                growth = 'n/a'
+                delta_color = 'off'
+            else:
+                growth = f'{last_gdp / first_gdp:,.2f}x'
+                delta_color = 'normal'
+    
+            st.metric(
+                label=f'{country} GDP',
+                value=f'{last_gdp:,.0f}B',
+                delta=growth,
+                delta_color=delta_color
+            )
 
 # Add content to the second column
 with col2:
