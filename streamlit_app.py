@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import math
 from pathlib import Path
+import eurostat as eust
 
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
@@ -58,6 +59,32 @@ def get_gdp_data():
 
     return gdp_df
 
+@st.cache_data
+def get_eust_data():
+    data = eust.get_data_df('nrg_cb_pem')
+
+    df = pd.DataFrame(data)
+    
+    # Rename the column 'geo\\TIME_PERIOD' to 'geo'
+    df.rename(columns={'geo\\TIME_PERIOD': 'geo'}, inplace=True)
+
+    # Drop the column 'freq'
+    df = df.drop(columns=['freq'])
+    
+    # Melt the dataframe to long format
+    df_melted = pd.melt(df, id_vars=['siec', 'unit', 'geo'], var_name='year_month', value_name='value')
+    
+    # Create a combined column for 'siec' and 'unit' to handle different units
+    df_melted['siec_unit'] = df_melted['siec'] + '_' + df_melted['unit']
+    
+    # Pivot the dataframe so that the combined 'siec_unit' values become columns
+    df_pivoted = df_melted.pivot_table(index=['year_month', 'geo'], columns='siec_unit', values='value').reset_index()
+    
+    # Flatten the columns after pivoting
+    df_pivoted.columns.name = None
+    
+    # Display the transformed dataframe
+    return df_pivoted
 
 # -----------------------------------------------------------------------------
 # Draw the actual page
@@ -80,7 +107,7 @@ col1, col2 = st.columns(2)
 
 # Add content to the first column
 with col1:
-    st.header("Column 1")
+    st.header("OLD GDP-stuff")
     gdp_df = get_gdp_data()
 
     min_value = gdp_df['Year'].min()
@@ -160,5 +187,8 @@ with col1:
 
 # Add content to the second column
 with col2:
-    st.header("Column 2")
-    st.write("This is content in the second column.")
+    st.header("Energy-Contet-Test")
+    eust_df = get_eust_data()
+
+    st.line_chart(eust_df, x='year_month', y='C0000_GWH',color='geo')
+    
