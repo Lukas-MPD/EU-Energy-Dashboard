@@ -7,6 +7,7 @@ from pathlib import Path
 st.set_page_config(
     page_title='GDP dashboard',
     page_icon=':electric_plug:', # This is an emoji shortcode. Could be a URL too.
+    layout="wide",
 )
 
 # -----------------------------------------------------------------------------
@@ -74,6 +75,19 @@ For now it's still GDP data from the [World Bank Open Data](https://data.worldba
 # Add some spacing
 ''
 ''
+
+# Create two columns
+col1, col2 = st.columns(2)
+
+# Add content to the first column
+with col1:
+    st.header("Column 1")
+    st.write("This is content in the first column.")
+
+# Add content to the second column
+with col2:
+    st.header("Column 2")
+    st.write("This is content in the second column.")
 
 min_value = gdp_df['Year'].min()
 max_value = gdp_df['Year'].max()
