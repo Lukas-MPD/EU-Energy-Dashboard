@@ -206,7 +206,7 @@ with col2:
     )
     
     # Display the selected dates
-    st.write(f'From date: {from_date.date()} to date: {to_date.date()}')
+    st.write(f'From date: {from_date} to date: {to_date}')
 
     st.line_chart(eust_df, x='year_month', y='C0000_GWH',color='geo')
     
