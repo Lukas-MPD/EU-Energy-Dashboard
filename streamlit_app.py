@@ -3,7 +3,7 @@ import pandas as pd
 import math
 from pathlib import Path
 import eurostat as eust
-import datetime
+from datetime import time
 
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
