@@ -3,6 +3,7 @@ import pandas as pd
 import math
 from pathlib import Path
 import eurostat as eust
+from datetime import datetime
 
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
@@ -83,8 +84,11 @@ def get_eust_data():
     # Flatten the columns after pivoting
     df_pivoted.columns.name = None
 
-    # Convert year_month to timestamps (seconds since epoch)
-    df_pivoted['timestamp'] = pd.to_datetime(df_pivoted['year_month'])
+    # Convert 'year_month' to datetime objects
+    df_pivoted['year_month'] = pd.to_datetime(df_pivoted['year_month'])
+    
+    # Extract date part (datetime.date objects)
+    df_pivoted['year_month'] = df_pivoted['year_month'].dt.date
     
     # Display the transformed dataframe
     return df_pivoted
@@ -193,19 +197,21 @@ with col2:
     st.header("Energy-Contet-Test")
     eust_df = get_eust_data()
 
-    min_date = eust_df['timestamp'].min()
-    max_date = eust_df['timestamp'].max()
+    #min_date = eust_df['timestamp'].min()
+    #max_date = eust_df['timestamp'].max()
 
     st.write(f'From date: {min_date} to date: {max_date}')
+    st.write(eust_df)
 
-    # Set up the Streamlit slider
     from_date, to_date = st.slider(
         'Which dates are you interested in?',
-        min_value = min_date,
-        max_value = max_date,
-        value=(min_date, max_date)
+        min_value=min(eust_df['year_month']),
+        max_value=max(eust_df['year_month']),
+        value=(min(eust_df['year_month']), max(eust_df['year_month'])),
+        format="YYYY-MM"
     )
-    
+
+
     # Display the selected dates
     #st.write(f'From date: {from_date} to date: {to_date}')
 
