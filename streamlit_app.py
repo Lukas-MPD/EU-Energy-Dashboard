@@ -175,8 +175,8 @@ with col2:
     #min_date = df_eust['timestamp'].min()
     #max_date = df_eust['timestamp'].max()
 
-    st.write(f'From date: {from_date} to date: {to_date}')
-    st.write(df_eust)
+    #st.write(f'From date: {from_date} to date: {to_date}')
+    #st.write(df_eust)
 
 
     # Filter the data
@@ -185,7 +185,7 @@ with col2:
         & (df_eust['year_month'] <= to_date)
         & (from_date <= df_eust['year_month'])
     ]
-    st.write(filtered_df_eust)
+    #st.write(filtered_df_eust)
     # Display the selected dates
     #st.write(f'From date: {from_date} to date: {to_date}')
 
