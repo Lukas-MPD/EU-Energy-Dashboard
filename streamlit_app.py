@@ -58,7 +58,6 @@ def get_gdp_data():
 
     return gdp_df
 
-gdp_df = get_gdp_data()
 
 # -----------------------------------------------------------------------------
 # Draw the actual page
@@ -83,6 +82,9 @@ col1, col2 = st.columns(2)
 with col1:
     st.header("Column 1")
     st.write(
+
+        
+        gdp_df = get_gdp_data()
 
         min_value = gdp_df['Year'].min()
         max_value = gdp_df['Year'].max()
