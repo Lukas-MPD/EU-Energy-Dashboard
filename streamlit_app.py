@@ -220,7 +220,7 @@ with col2:
     #max_date = df_eust['timestamp'].max()
 
     st.write(f'From date: {from_date} to date: {to_date}')
-    # st.write(df_eust)
+    st.write(df_eust)
 
 
     # Filter the data
