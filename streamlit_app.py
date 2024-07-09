@@ -195,7 +195,7 @@ with col1:
 # Add content to the second column
 with col2:
     st.header("Energy-Contet-Test")
-    eust_df = get_eust_data()
+    # eust_df = get_eust_data()
 
     #min_date = eust_df['timestamp'].min()
     #max_date = eust_df['timestamp'].max()
