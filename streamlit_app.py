@@ -111,6 +111,27 @@ For now it's still GDP data from the [World Bank Open Data](https://data.worldba
 # Create two columns
 col1, col2 = st.columns(2)
 df_eust = get_eust_data()
+
+with st.sidebar:
+
+    from_date, to_date = st.slider(
+        'Which dates are you interested in?',
+        min_value=min(df_eust['year_month']),
+        max_value=max(df_eust['year_month']),
+        value=(min(df_eust['year_month']), max(df_eust['year_month'])),
+        format="YYYY-MM"
+    )
+
+    countries = df_eust['geo'].unique()
+    
+    if not len(countries):
+        st.warning("Select at least one country")
+    
+    selected_countries = st.multiselect(
+        'Which countries would you like to view?',
+        countries,
+        ['CZ', 'FR', 'ES', 'DE'])
+
 # Add content to the first column
 with col1:
     st.header("OLD GDP-stuff")
@@ -214,22 +235,4 @@ with col2:
 
     st.line_chart(filtered_df_eust, x='year_month', y='C0000_GWH',color='geo')
     
-with st.sidebar:
 
-    from_date, to_date = st.slider(
-        'Which dates are you interested in?',
-        min_value=min(df_eust['year_month']),
-        max_value=max(df_eust['year_month']),
-        value=(min(df_eust['year_month']), max(df_eust['year_month'])),
-        format="YYYY-MM"
-    )
-
-    countries = df_eust['geo'].unique()
-    
-    if not len(countries):
-        st.warning("Select at least one country")
-    
-    selected_countries = st.multiselect(
-        'Which countries would you like to view?',
-        countries,
-        ['CZ', 'FR', 'ES', 'DE'])
