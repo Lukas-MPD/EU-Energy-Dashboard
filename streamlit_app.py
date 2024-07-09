@@ -3,7 +3,6 @@ import pandas as pd
 import math
 from pathlib import Path
 import eurostat as eust
-from datetime import time
 
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
@@ -86,9 +85,6 @@ def get_eust_data():
 
     # Convert year_month to timestamps (seconds since epoch)
     df_pivoted['timestamp'] = pd.to_datetime(df_pivoted['year_month'])
-    
-    # Apply lambda function to convert Timestamp objects to Unix timestamps
-    df_pivoted['unix_timestamp'] = df_pivoted['timestamp'].apply(lambda x: x.timestamp())
     
     # Display the transformed dataframe
     return df_pivoted
@@ -196,6 +192,11 @@ with col1:
 with col2:
     st.header("Energy-Contet-Test")
     eust_df = get_eust_data()
+
+    date_min = eust_df['timestamp'].min()
+    date_max = eust_df['timestamp'].max()
+
+    st.write(f'From date: {date_min} to date: {date_max}')
 
     # Set up the Streamlit slider
     from_date, to_date = st.slider(
