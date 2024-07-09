@@ -196,7 +196,7 @@ with col2:
     min_date = eust_df['timestamp'].min()
     max_date = eust_df['timestamp'].max()
 
-    st.write(f'From date: {date_min} to date: {date_max}')
+    st.write(f'From date: {min_date} to date: {max_date}')
 
     # Set up the Streamlit slider
     from_date, to_date = st.slider(
