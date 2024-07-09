@@ -200,7 +200,7 @@ with col2:
     # Set up the Streamlit slider
     from_date, to_date = st.slider(
         'Which dates are you interested in?',
-        value=(time(11, 30), time(12, 45))
+        value=(eust_df['timestamp'].min(), eust_df['timestamp'].max())
     )
     
     # Display the selected dates
