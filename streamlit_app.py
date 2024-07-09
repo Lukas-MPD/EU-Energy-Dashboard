@@ -200,7 +200,7 @@ with col2:
     #min_date = eust_df['timestamp'].min()
     #max_date = eust_df['timestamp'].max()
 
-    st.write(f'From date: {min_date} to date: {max_date}')
+    # st.write(f'From date: {min_date} to date: {max_date}')
     st.write(eust_df)
 
     from_date, to_date = st.slider(
