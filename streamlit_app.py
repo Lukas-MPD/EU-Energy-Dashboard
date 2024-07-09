@@ -60,7 +60,7 @@ def get_gdp_data():
 
     return gdp_df
 
-# @st.cache_data
+@st.cache_data
 def get_eust_data():
     data = eust.get_data_df('nrg_cb_pem')
 
@@ -201,7 +201,7 @@ with col2:
     #max_date = eust_df['timestamp'].max()
 
     # st.write(f'From date: {min_date} to date: {max_date}')
-    st.write(eust_df)
+    # st.write(eust_df)
 
     from_date, to_date = st.slider(
         'Which dates are you interested in?',
