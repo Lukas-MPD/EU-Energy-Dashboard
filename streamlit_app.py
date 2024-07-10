@@ -208,7 +208,7 @@ with col2:
     #st.write(f'From date: {from_date} to date: {to_date}')
     #st.write(df_eust)
 
-    picked_unit = 
+    picked_unit = 'C0000_GWH'
     
     # Filter the data
     filtered_df_eust = df_eust[
@@ -220,6 +220,6 @@ with col2:
     # Display the selected dates
     #st.write(f'From date: {from_date} to date: {to_date}')
 
-    st.line_chart(filtered_df_eust, x='year_month', y='C0000_GWH',color='geo')
+    st.line_chart(filtered_df_eust, x=picked_unit, y='C0000_GWH',color='geo')
     
 
