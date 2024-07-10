@@ -239,7 +239,7 @@ with col1:
     st.write(merged)
     # Convert GeoDataFrame to GeoJSON
     geojson_data = merged.to_json()
-    st.write(geojson_data)
+    #st.write(geojson_data)
     # Create a base map
     m = folium.Map(location=[55.00, 13.0], zoom_start=3)
     
