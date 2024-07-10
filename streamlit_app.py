@@ -9,6 +9,7 @@ import pydeck as pdk
 import folium
 from streamlit_folium import folium_static
 from streamlit_folium import st_folium
+import streamlit.components.v1 as components
 
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
