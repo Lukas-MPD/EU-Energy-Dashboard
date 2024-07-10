@@ -156,7 +156,7 @@ with st.sidebar:
         & (from_date <= df_eust['year_month'])
     ]
 
-    dic_units = eurostat.get_dic(df_name, 'siec', frmt='df')
+    dic_units = eust.get_dic(df_name, 'siec', frmt='df')
 
     st.write(dic_units)
     
