@@ -194,7 +194,12 @@ with col1:
 
     nuts = get_nuts()
 
-    merged = nuts.merge(filtered_df_eust, left_on='CNTR_CODE', right_on='geo')
+
+    oneYear_df_eust = df_eust[
+        (df_eust['geo'].isin(selected_countries))
+        & (df_eust['year_month'] == to_date)
+    ]
+    merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
 
     # Ensure the GeoDataFrame contains only necessary columns
     merged = merged[['CNTR_CODE', 'geometry']]
