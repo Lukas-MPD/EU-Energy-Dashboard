@@ -209,7 +209,7 @@ with col1:
     geojson_data = merged.to_json()
     #st.write(geojson_data)
     # Create a base map
-    m = folium.Map(location=[54.00, 14.0], zoom_start=3.8)
+    m = folium.Map(location=[55.00, 13.0], zoom_start=3.2)
     
     # Add a choropleth layer to the map
     
