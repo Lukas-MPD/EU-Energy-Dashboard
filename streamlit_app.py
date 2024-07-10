@@ -202,7 +202,7 @@ with col1:
     merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
 
     # Ensure the GeoDataFrame contains only necessary columns
-    #merged = merged[['CNTR_CODE', 'geometry']]
+    merged = merged[['CNTR_CODE', picked_unit, 'geometry']]
     st.write(merged)
     # Convert GeoDataFrame to GeoJSON
     geojson_data = merged.to_json()
