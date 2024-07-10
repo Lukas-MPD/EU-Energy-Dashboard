@@ -235,7 +235,7 @@ with col1:
     
     folium_static(m)
 
-    #m.save('map.html')
+    m.save('map.html')
 
     # Display the map in Streamlit using an iframe
     #components.iframe(src="map.html", width=700, height=500)
