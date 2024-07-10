@@ -2,5 +2,5 @@ streamlit
 pandas
 eurostat
 geopandas
-folium
-streamlit_folium==0.20.1
+folium==0.16.0
+streamlit_folium==0.18.1
