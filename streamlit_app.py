@@ -174,13 +174,17 @@ with st.sidebar:
     
     picked_unit = descr_to_val[picked_unit_name]
 
-
+    st.write(picked_unit)
+    
 # Add content to the first column
 with col1:
     
     
     st.header("Map")
 
+
+    st.write(df_eust)
+    st.write(dic_eust)
     ## Sample data
     #data = {'lat': [37.76, 34.05], 'lon': [-122.4, -118.25]}
     #df = pd.DataFrame(data)
