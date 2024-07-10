@@ -1,10 +1,14 @@
 import streamlit as st
 import pandas as pd
+import geopandas as gpd
 import math
 from pathlib import Path
 import eurostat as eust
 from datetime import datetime
 import pydeck as pdk
+import folium
+from streamlit_folium import st_folium
+
 
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
@@ -93,6 +97,13 @@ def get_eust_data():
     # Display the transformed dataframe
     return df_pivoted
 
+@st.cache_data
+def get_nuts():
+    DATA_FILENAME = Path(__file__).parent/'data/NUTS_RG_20M_2021_4326.geojson'
+    nuts = gpd.read_file(DATA_FILENAME)
+    nuts = nuts.query('LEVL_CODE == 0')
+    return nuts
+
 # -----------------------------------------------------------------------------
 # Draw the actual page
 
@@ -132,6 +143,14 @@ with st.sidebar:
         'Which countries would you like to view?',
         countries,
         ['CZ', 'FR', 'ES', 'DE'])
+
+    filtered_df_eust = df_eust[
+        (df_eust['geo'].isin(selected_countries))
+        & (df_eust['year_month'] <= to_date)
+        & (from_date <= df_eust['year_month'])
+    ]
+
+    picked_unit = 'C0000_GWH'
 
 # Add content to the first column
 with col1:
@@ -173,7 +192,25 @@ with col1:
         initial_view_state=view_state
     ))
 
+    nuts = get_nuts()
 
+    merged = nuts.merge(filtered_df_eust, left_on='CNTR_CODE', right_on='geo')
+
+    # Create a base map
+    m = folium.Map(location=[54.5260, 15.2551], zoom_start=4)
+    
+    # Add a choropleth layer to the map
+    folium.Choropleth(
+        geo_data=merged,
+        data=merged,
+        columns=['CNTR_CODE', picked_unit],
+        key_on='feature.properties.CNTR_CODE',
+        fill_color='YlOrRd',
+        fill_opacity=0.7,
+        line_opacity=0.2,
+        legend_name='Legend Name'
+    ).add_to(m)
+    
     #first_year = gdp_df[gdp_df['Year'] == from_year]
     #last_year = gdp_df[gdp_df['Year'] == to_year]
     
@@ -214,18 +251,14 @@ with col2:
     #st.write(f'From date: {from_date} to date: {to_date}')
     #st.write(df_eust)
 
-    picked_unit = 'C0000_GWH'
+    
     
     # Filter the data
-    filtered_df_eust = df_eust[
-        (df_eust['geo'].isin(selected_countries))
-        & (df_eust['year_month'] <= to_date)
-        & (from_date <= df_eust['year_month'])
-    ]
+
     #st.write(filtered_df_eust)
     # Display the selected dates
     #st.write(f'From date: {from_date} to date: {to_date}')
 
-    st.line_chart(filtered_df_eust, x=picked_unit, y='C0000_GWH',color='geo')
+    st.line_chart(filtered_df_eust, x='year_month', y=picked_unit,color='geo')
     
 
