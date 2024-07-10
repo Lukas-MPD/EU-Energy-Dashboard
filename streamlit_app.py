@@ -7,7 +7,7 @@ import eurostat as eust
 from datetime import datetime
 import pydeck as pdk
 import folium
-#from streamlit_folium import st_folium
+from streamlit_folium import folium_static
 
 
 # Set the title and favicon that appear in the Browser's tab bar.
@@ -231,7 +231,7 @@ with col1:
         legend_name='Legend Name'
     ).add_to(m)
     """
-    st.pydeck_chart(m)
+    folium_static(m)
     
     #first_year = gdp_df[gdp_df['Year'] == from_year]
     #last_year = gdp_df[gdp_df['Year'] == to_year]
