@@ -112,9 +112,7 @@ def get_nuts():
 '''
 # :electric_plug: Energy in the EU :flag-eu:
 
-In Future: Browse energy data from the [eurostat Database](https://ec.europa.eu/eurostat/data/database). This data is updated quarterly by eurostat and queried via API.
-
-For now it's still GDP data from the [World Bank Open Data](https://data.worldbank.org/).
+Browse energy data from the [eurostat Database](https://ec.europa.eu/eurostat/data/database). This data is updated monthly by eurostat and queried via API.
 '''
 
 # Add some spacing
@@ -162,17 +160,25 @@ with st.sidebar:
 
     descr_to_val = dict(zip(dic_units['descr'], dic_units['val']))
     
-    st.write(descr_to_val)
+    # Exclude 'geo' and 'year_month' from the available siec values
+    available_siec_values = df_eust.columns.difference(['geo', 'year_month']).tolist()
+    
+    # Filter dic_units based on available siec values
+    filtered_dic_units = dic_units[dic_units['val'].isin(available_siec_values)]
+    
+    filtered_descr_to_val = dict(zip(filtered_dic_units['descr'], filtered_dic_units['val']))
+    
+    st.write(filtered_dic_units)
     
     picked_unit_name = st.selectbox(
-        'Wich energy source would you like to view?',
-        dic_units['descr'],
-        index=dic_units['descr'].tolist().index('Total')
+        'Which energy source would you like to view?',
+        filtered_dic_units['descr'],
+        index=filtered_dic_units['descr'].tolist().index('Total')
     )
 
     st.write(picked_unit_name)
     
-    picked_unit = descr_to_val[picked_unit_name]
+    picked_unit = filtered_descr_to_val[picked_unit_name]
 
     st.write(picked_unit)
     
