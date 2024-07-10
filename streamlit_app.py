@@ -159,39 +159,39 @@ with col1:
     
     st.header("OLD GDP-stuff")
 
-    # Sample data
-    data = {'lat': [37.76, 34.05], 'lon': [-122.4, -118.25]}
-    df = pd.DataFrame(data)
+    ## Sample data
+    #data = {'lat': [37.76, 34.05], 'lon': [-122.4, -118.25]}
+    #df = pd.DataFrame(data)
     
     # Display the map
-    st.map(df)
+    #st.map(df)
 
     # Define a PyDeck layer
-    layer = pdk.Layer(
-        'HexagonLayer',
-        df,
-        get_position='[lon, lat]',
-        auto_highlight=True,
-        elevation_scale=50,
-        pickable=True,
-        elevation_range=[0, 3000],
-        extruded=True,
-        coverage=1
-    )
+    #layer = pdk.Layer(
+    #    'HexagonLayer',
+    #    df,
+    #    get_position='[lon, lat]',
+    #    auto_highlight=True,
+    #    elevation_scale=50,
+    #    pickable=True,
+    #    elevation_range=[0, 3000],
+    #    extruded=True,
+    #    coverage=1
+    #)
     
     # Set the viewport location
-    view_state = pdk.ViewState(
-        longitude=-122.4,
-        latitude=37.76,
-        zoom=6,
-        pitch=50
-    )
+    #view_state = pdk.ViewState(
+    #    longitude=-122.4,
+    #    latitude=37.76,
+    #    zoom=6,
+    #    pitch=50
+    #)
     
     # Render the map with PyDeck
-    st.pydeck_chart(pdk.Deck(
-        layers=[layer],
-        initial_view_state=view_state
-    ))
+    #st.pydeck_chart(pdk.Deck(
+    #    layers=[layer],
+    #    initial_view_state=view_state
+    #))
 
     nuts = get_nuts()
 
@@ -233,7 +233,7 @@ with col1:
         tooltip=folium.GeoJsonTooltip(fields=['CNTR_CODE'], aliases=['Country Code:'])
     ).add_to(m)
     
-    folium_static(m)
+    #folium_static(m)
 
     st_folium(m)
     # m.save('map.html')
@@ -293,11 +293,11 @@ with col2:
 
         
     # center on Liberty Bell, add marker
-    m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
-    folium.Marker(
-        [39.949610, -75.150282], popup="Liberty Bell", tooltip="Liberty Bell"
-    ).add_to(m)
+    #m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
+    #folium.Marker(
+    #    [39.949610, -75.150282], popup="Liberty Bell", tooltip="Liberty Bell"
+    #).add_to(m)
     
     # call to render Folium map in Streamlit
-    st_data = st_folium(m, width=725)
+    #st_data = st_folium(m, width=725)
 
