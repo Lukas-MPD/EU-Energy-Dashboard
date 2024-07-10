@@ -66,8 +66,8 @@ def get_gdp_data():
 
     return gdp_df
 
-def get_eust_data():
-    data = eust.get_data_df('nrg_cb_pem')
+def get_eust_data(dataframe: str):
+    data = eust.get_data_df(dataframe)
 
     df = pd.DataFrame(data)
     
@@ -123,10 +123,15 @@ For now it's still GDP data from the [World Bank Open Data](https://data.worldba
 
 # Create two columns
 col1, col2 = st.columns(2)
-df_eust = get_eust_data()
+
+
 
 with st.sidebar:
 
+    df_name = 'nrg_cb_pem'
+
+    df_eust = get_eust_data(df_name)
+    
     from_date, to_date = st.slider(
         'Which dates are you interested in?',
         min_value=min(df_eust['year_month']),
@@ -151,6 +156,10 @@ with st.sidebar:
         & (from_date <= df_eust['year_month'])
     ]
 
+    dic_units = eurostat.get_dic(df_name, 'siec', frmt='df')
+
+    st.write(dic_units)
+    
     picked_unit = 'C0000_GWH'
 
 # Add content to the first column
