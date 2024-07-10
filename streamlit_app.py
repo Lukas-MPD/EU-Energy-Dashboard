@@ -229,7 +229,7 @@ with col1:
 
     oneYear_df_eust = df_eust[
         (df_eust['geo'].isin(selected_countries))
-        & (df_eust['year_month'] == to_date)
+        #& (df_eust['year_month'] == to_date)
     ]
     st.write(oneYear_df_eust)
     merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
