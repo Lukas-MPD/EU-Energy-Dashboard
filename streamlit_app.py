@@ -8,7 +8,7 @@ from datetime import datetime
 import pydeck as pdk
 import folium
 from streamlit_folium import folium_static
-
+from streamlit_folium import st_folium
 
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
@@ -233,7 +233,8 @@ with col1:
     ).add_to(m)
     
     folium_static(m)
-    
+
+    st_folium(m)
     #first_year = gdp_df[gdp_df['Year'] == from_year]
     #last_year = gdp_df[gdp_df['Year'] == to_year]
     
