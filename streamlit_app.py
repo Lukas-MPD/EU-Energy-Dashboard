@@ -159,8 +159,13 @@ with st.sidebar:
     dic_units = eust.get_dic(df_name, 'siec', frmt='df')
 
     st.write(dic_units)
+
+    picked_unit = st.select(
+        'Wich energy source would you like to view?',
+        df_units['val'],
+        'C0000')
     
-    picked_unit = 'C0000_GWH'
+    picked_unit = picked_unit + '_GWH'
 
 # Add content to the first column
 with col1:
