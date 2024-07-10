@@ -137,11 +137,11 @@ with st.sidebar:
         value=(min(df_eust['year_month']), max(df_eust['year_month'])),
         format="YYYY-MM"
     )
-    st.write(f'from: {from_date} to: {to_date}.')
+    #st.write(f'from: {from_date} to: {to_date}.')
     from_date = from_date.replace(day=1)
     to_date = to_date.replace(day=1)
 
-    st.write(f'NEW: from: {from_date} to: {to_date}.')
+    #st.write(f'NEW: from: {from_date} to: {to_date}.')
     
     countries = df_eust['geo'].unique()
     
@@ -161,7 +161,7 @@ with st.sidebar:
 
     dic_units = eust.get_dic(df_name, 'siec', frmt='df')
 
-    st.write(dic_units)
+    #st.write(dic_units)
 
     descr_to_val = dict(zip(dic_units['descr'], dic_units['val']))
     
@@ -173,7 +173,7 @@ with st.sidebar:
     
     filtered_descr_to_val = dict(zip(filtered_dic_units['descr'], filtered_dic_units['val']))
     
-    st.write(filtered_dic_units)
+    #st.write(filtered_dic_units)
     
     picked_unit_name = st.selectbox(
         'Which energy source would you like to view?',
@@ -181,11 +181,11 @@ with st.sidebar:
         index=filtered_dic_units['descr'].tolist().index('Total')
     )
 
-    st.write(picked_unit_name)
+    #st.write(picked_unit_name)
     
     picked_unit = filtered_descr_to_val[picked_unit_name]
 
-    st.write(picked_unit)
+    #st.write(picked_unit)
     
 # Add content to the first column
 with col1:
@@ -194,9 +194,9 @@ with col1:
     st.header("Map")
 
 
-    st.write(df_eust)
-    st.write(dic_eust)
-    st.write(filtered_df_eust)
+    #st.write(df_eust)
+    #st.write(dic_eust)
+    #st.write(filtered_df_eust)
     ## Sample data
     #data = {'lat': [37.76, 34.05], 'lon': [-122.4, -118.25]}
     #df = pd.DataFrame(data)
@@ -237,12 +237,12 @@ with col1:
         (df_eust['geo'].isin(selected_countries))
         & (df_eust['year_month'] == to_date)
     ]
-    st.write(oneYear_df_eust)
+    #st.write(oneYear_df_eust)
     merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
-    st.write(merged)
+    #st.write(merged)
     # Ensure the GeoDataFrame contains only necessary columns
     merged = merged[['CNTR_CODE', picked_unit, 'geometry']]
-    st.write(merged)
+    #st.write(merged)
     # Convert GeoDataFrame to GeoJSON
     geojson_data = merged.to_json()
     #st.write(geojson_data)
