@@ -160,11 +160,16 @@ with st.sidebar:
 
     st.write(dic_units)
 
-    picked_unit = st.select(
+    dic_units = eust.get_dic(df_name, 'siec')
+
+    st.write(dic_units)
+
+    picked_unit_name = st.selectbox(
         'Wich energy source would you like to view?',
-        df_units['val'],
-        'C0000')
-    
+        df_units['descr'],
+        index=df_units['descr'].tolist().index('Total')
+    )
+    picked_unit = 'C0000'
     picked_unit = picked_unit + '_GWH'
 
 # Add content to the first column
