@@ -202,16 +202,16 @@ with col1:
     merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
 
     # Ensure the GeoDataFrame contains only necessary columns
-    merged = merged[['CNTR_CODE', 'geometry']]
+    #merged = merged[['CNTR_CODE', 'geometry']]
     st.write(merged)
     # Convert GeoDataFrame to GeoJSON
     geojson_data = merged.to_json()
-    st.write(geojson_data)
+    #st.write(geojson_data)
     # Create a base map
     m = folium.Map(location=[54.5260, 15.2551], zoom_start=3)
     
     # Add a choropleth layer to the map
-
+    """
     folium.GeoJson(
         geo_data=geojson_data,
         name='NUTS Level 0',
@@ -229,7 +229,7 @@ with col1:
         line_opacity=0.2,
         legend_name='Legend Name'
     ).add_to(m)
-"""
+
     st_folium(m)
     
     #first_year = gdp_df[gdp_df['Year'] == from_year]
