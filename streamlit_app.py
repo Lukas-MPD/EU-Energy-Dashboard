@@ -4,6 +4,7 @@ import math
 from pathlib import Path
 import eurostat as eust
 from datetime import datetime
+import pydeck as pdk
 
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
@@ -137,7 +138,36 @@ with col1:
     
     
     st.header("OLD GDP-stuff")
+
+
+    # Define a PyDeck layer
+    layer = pdk.Layer(
+        'HexagonLayer',
+        df,
+        get_position='[lon, lat]',
+        auto_highlight=True,
+        elevation_scale=50,
+        pickable=True,
+        elevation_range=[0, 3000],
+        extruded=True,
+        coverage=1
+    )
     
+    # Set the viewport location
+    view_state = pdk.ViewState(
+        longitude=-122.4,
+        latitude=37.76,
+        zoom=6,
+        pitch=50
+    )
+    
+    # Render the map with PyDeck
+    st.pydeck_chart(pdk.Deck(
+        layers=[layer],
+        initial_view_state=view_state
+    ))
+
+
     #first_year = gdp_df[gdp_df['Year'] == from_year]
     #last_year = gdp_df[gdp_df['Year'] == to_year]
     
@@ -178,7 +208,8 @@ with col2:
     #st.write(f'From date: {from_date} to date: {to_date}')
     #st.write(df_eust)
 
-
+    picked_unit = 
+    
     # Filter the data
     filtered_df_eust = df_eust[
         (df_eust['geo'].isin(selected_countries))
