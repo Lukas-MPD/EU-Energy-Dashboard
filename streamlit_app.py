@@ -204,7 +204,7 @@ with col1:
 
     # Ensure the GeoDataFrame contains only necessary columns
     merged = merged[['CNTR_CODE', picked_unit, 'geometry']]
-    st.write(merged)
+    #st.write(merged)
     # Convert GeoDataFrame to GeoJSON
     geojson_data = merged.to_json()
     #st.write(geojson_data)
@@ -212,14 +212,14 @@ with col1:
     m = folium.Map(location=[54.5260, 15.2551], zoom_start=4)
     
     # Add a choropleth layer to the map
-    """
-    folium.GeoJson(
-        geo_data=geojson_data,
-        name='NUTS Level 0',
-        tooltip=folium.GeoJsonTooltip(fields=['CNTR_CODE'], aliases=['Country Code:'])
-    ).add_to(m)
     
-    """
+    #folium.GeoJson(
+    #    geo_data=geojson_data,
+    #    name='NUTS Level 0',
+    #    tooltip=folium.GeoJsonTooltip(fields=['CNTR_CODE'], aliases=['Country Code:'])
+    #).add_to(m)
+    
+    
     
     folium.Choropleth(
         geo_data=geojson_data,
