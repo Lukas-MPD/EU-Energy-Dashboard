@@ -139,6 +139,12 @@ with col1:
     
     st.header("OLD GDP-stuff")
 
+    # Sample data
+    data = {'lat': [37.76, 34.05], 'lon': [-122.4, -118.25]}
+    df = pd.DataFrame(data)
+    
+    # Display the map
+    st.map(df)
 
     # Define a PyDeck layer
     layer = pdk.Layer(
