@@ -219,6 +219,7 @@ with col1:
     ).add_to(m)
     
     """
+    """
     folium.Choropleth(
         geo_data=geojson_data,
         data=merged,
@@ -229,7 +230,7 @@ with col1:
         line_opacity=0.2,
         legend_name='Legend Name'
     ).add_to(m)
-
+    """
     st.pydeck_chart(m)
     
     #first_year = gdp_df[gdp_df['Year'] == from_year]
