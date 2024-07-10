@@ -157,7 +157,7 @@ with st.sidebar:
 with col1:
     
     
-    st.header("OLD GDP-stuff")
+    st.header("Map")
 
     ## Sample data
     #data = {'lat': [37.76, 34.05], 'lon': [-122.4, -118.25]}
@@ -209,7 +209,7 @@ with col1:
     geojson_data = merged.to_json()
     #st.write(geojson_data)
     # Create a base map
-    m = folium.Map(location=[54.5260, 15.2551], zoom_start=3)
+    m = folium.Map(location=[54.5260, 15.2551], zoom_start=4)
     
     # Add a choropleth layer to the map
     """
@@ -272,7 +272,7 @@ with col1:
 
 # Add content to the second column
 with col2:
-    st.header("Energy-Contet-Test")
+    st.header("Carts")
 
     #min_date = df_eust['timestamp'].min()
     #max_date = df_eust['timestamp'].max()
