@@ -203,7 +203,7 @@ with col1:
     folium.Choropleth(
         geo_data=merged,
         data=merged,
-        columns=['CNTR_CODE', picked_unit],
+        columns=['CNTR_CODE', 'C0000_GWH'],
         key_on='feature.properties.CNTR_CODE',
         fill_color='YlOrRd',
         fill_opacity=0.7,
