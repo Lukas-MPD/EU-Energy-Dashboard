@@ -161,14 +161,16 @@ with st.sidebar:
     st.write(dic_units)
 
     descr_to_val = dict(zip(dic_units['descr'], dic_units['val']))
-
+    
+    st.write(descr_to_val)
+    
     picked_unit_name = st.selectbox(
         'Wich energy source would you like to view?',
         dic_units['descr'],
         index=dic_units['descr'].tolist().index('Total')
     )
     picked_unit = descr_to_val[picked_unit_name]
-    picked_unit = picked_unit + '_GWH'
+
 
 # Add content to the first column
 with col1:
