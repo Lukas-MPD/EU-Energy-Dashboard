@@ -223,7 +223,7 @@ with col1:
         & (df_eust['year_month'] == to_date)
     ]
     merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
-
+    st.write(merged)
     # Ensure the GeoDataFrame contains only necessary columns
     merged = merged[['CNTR_CODE', picked_unit, 'geometry']]
     #st.write(merged)
