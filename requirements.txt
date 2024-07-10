@@ -3,4 +3,4 @@ pandas
 eurostat
 geopandas
 folium
-streamlit_folium
+streamlit_folium==0.20.1
