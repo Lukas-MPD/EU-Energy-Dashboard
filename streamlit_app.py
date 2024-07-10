@@ -228,7 +228,8 @@ with col1:
         fill_color='YlOrRd',
         fill_opacity=0.7,
         line_opacity=0.2,
-        legend_name='Legend Name'
+        legend_name='Legend Name',
+        tooltip=folium.GeoJsonTooltip(fields=['CNTR_CODE'], aliases=['Country Code:'])
     ).add_to(m)
     
     folium_static(m)
