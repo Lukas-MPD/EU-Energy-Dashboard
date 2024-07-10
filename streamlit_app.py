@@ -80,11 +80,8 @@ def get_eust_data(dataframe: str):
     # Melt the dataframe to long format
     df_melted = pd.melt(df, id_vars=['siec', 'unit', 'geo'], var_name='year_month', value_name='value')
     
-    # Create a combined column for 'siec' and 'unit' to handle different units
-    df_melted['siec_unit'] = df_melted['siec'] + '_' + df_melted['unit']
-    
     # Pivot the dataframe so that the combined 'siec_unit' values become columns
-    df_pivoted = df_melted.pivot_table(index=['year_month', 'geo'], columns='siec_unit', values='value').reset_index()
+    df_pivoted = df_melted.pivot_table(index=['year_month', 'geo'], columns='siec', values='value').reset_index()
     
     # Flatten the columns after pivoting
     df_pivoted.columns.name = None
@@ -94,9 +91,12 @@ def get_eust_data(dataframe: str):
     
     # Extract date part (datetime.date objects)
     df_pivoted['year_month'] = df_pivoted['year_month'].dt.date
+
+    # Create a dictionary mapping siec to unit
+    siec_unit_dict = df_melted.set_index('siec')['unit'].to_dict()
     
     # Display the transformed dataframe
-    return df_pivoted
+    return df_pivoted, siec_unit_dict
 
 @st.cache_data
 def get_nuts():
@@ -130,7 +130,7 @@ with st.sidebar:
 
     df_name = 'nrg_cb_pem'
 
-    df_eust = get_eust_data(df_name)
+    df_eust, dic_eust = get_eust_data(df_name)
     
     from_date, to_date = st.slider(
         'Which dates are you interested in?',
@@ -160,16 +160,14 @@ with st.sidebar:
 
     st.write(dic_units)
 
-    dic_units = eust.get_dic(df_name, 'siec')
-
-    st.write(dic_units)
+    descr_to_val = dict(zip(dic_units['val'], dic_units['descr']))
 
     picked_unit_name = st.selectbox(
         'Wich energy source would you like to view?',
         df_units['descr'],
         index=df_units['descr'].tolist().index('Total')
     )
-    picked_unit = 'C0000'
+    picked_unit = descr_to_val[picked_unit_name]
     picked_unit = picked_unit + '_GWH'
 
 # Add content to the first column
