@@ -197,7 +197,7 @@ with col1:
     merged = nuts.merge(filtered_df_eust, left_on='CNTR_CODE', right_on='geo')
 
     # Ensure the GeoDataFrame contains only necessary columns
-    merged = merged[['CNTR_CODE', 'value_column', 'geometry']]
+    merged = merged[['CNTR_CODE', picked_unit, 'geometry']]
     
     # Convert GeoDataFrame to GeoJSON
     geojson_data = merged.to_json()
@@ -209,7 +209,7 @@ with col1:
     folium.Choropleth(
         geo_data=geojson_data,
         data=merged,
-        columns=['CNTR_CODE', 'C0000_GWH'],
+        columns=['CNTR_CODE', picked_unit],
         key_on='feature.properties.CNTR_CODE',
         fill_color='YlOrRd',
         fill_opacity=0.7,
