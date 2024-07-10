@@ -207,6 +207,11 @@ with col1:
     
     # Add a choropleth layer to the map
 
+    folium.GeoJson(
+        geojson_data,
+        name='NUTS Level 0',
+        tooltip=folium.GeoJsonTooltip(fields=['CNTR_CODE'], aliases=['Country Code:'])
+    ).add_to(m)
     """
     folium.Choropleth(
         geo_data=geojson_data,
