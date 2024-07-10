@@ -122,7 +122,7 @@ For now it's still GDP data from the [World Bank Open Data](https://data.worldba
 ''
 
 # Create two columns
-col1, col2 = st.columns([1.5,1)
+col1, col2 = st.columns([1.5,1])
 df_eust = get_eust_data()
 
 with st.sidebar:
