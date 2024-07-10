@@ -151,7 +151,7 @@ with st.sidebar:
     selected_countries = st.multiselect(
         'Which countries would you like to view?',
         countries,
-        ['CZ', 'FR', 'ES', 'DE'])
+        countries)
 
     filtered_df_eust = df_eust[
         (df_eust['geo'].isin(selected_countries))
