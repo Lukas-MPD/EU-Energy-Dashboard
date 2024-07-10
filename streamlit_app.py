@@ -191,6 +191,7 @@ with col1:
 
     st.write(df_eust)
     st.write(dic_eust)
+    st.write(filtered_df_eust)
     ## Sample data
     #data = {'lat': [37.76, 34.05], 'lon': [-122.4, -118.25]}
     #df = pd.DataFrame(data)
