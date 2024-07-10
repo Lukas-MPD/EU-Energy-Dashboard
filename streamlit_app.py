@@ -122,7 +122,7 @@ For now it's still GDP data from the [World Bank Open Data](https://data.worldba
 ''
 
 # Create two columns
-col1, col2 = st.columns([1.5,1])
+col1, col2 = st.columns(2)
 df_eust = get_eust_data()
 
 with st.sidebar:
@@ -209,7 +209,7 @@ with col1:
     geojson_data = merged.to_json()
     #st.write(geojson_data)
     # Create a base map
-    m = folium.Map(location=[55.00, 13.0], zoom_start=3.5)
+    m = folium.Map(location=[55.00, 13.0], zoom_start=3)
     
     # Add a choropleth layer to the map
     
