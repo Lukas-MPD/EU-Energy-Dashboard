@@ -169,6 +169,9 @@ with st.sidebar:
         dic_units['descr'],
         index=dic_units['descr'].tolist().index('Total')
     )
+
+    st.write(picked_unit_name)
+    
     picked_unit = descr_to_val[picked_unit_name]
 
 
