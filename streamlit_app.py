@@ -197,21 +197,22 @@ with col1:
     merged = nuts.merge(filtered_df_eust, left_on='CNTR_CODE', right_on='geo')
 
     # Ensure the GeoDataFrame contains only necessary columns
-    merged = merged[['CNTR_CODE', picked_unit, 'geometry']]
+    merged = merged[['CNTR_CODE', 'geometry']]
     
     # Convert GeoDataFrame to GeoJSON
     geojson_data = merged.to_json()
     
     # Create a base map
-    m = folium.Map(location=[54.5260, 15.2551], zoom_start=4)
+    m = folium.Map(location=[54.5260, 15.2551], zoom_start=3)
     
     # Add a choropleth layer to the map
 
     folium.GeoJson(
-        geojson_data,
+        geo_data=geojson_data,
         name='NUTS Level 0',
         tooltip=folium.GeoJsonTooltip(fields=['CNTR_CODE'], aliases=['Country Code:'])
     ).add_to(m)
+    
     """
     folium.Choropleth(
         geo_data=geojson_data,
