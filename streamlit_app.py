@@ -227,11 +227,11 @@ with col1:
 
     nuts = get_nuts()
 
-    st.write(df_eust)
     oneYear_df_eust = df_eust[
         (df_eust['geo'].isin(selected_countries))
         & (df_eust['year_month'] == to_date)
     ]
+    st.write(oneYear_df_eust)
     merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
     st.write(merged)
     # Ensure the GeoDataFrame contains only necessary columns
