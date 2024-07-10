@@ -160,7 +160,7 @@ with st.sidebar:
 
     st.write(dic_units)
 
-    descr_to_val = dict(zip(dic_units['val'], dic_units['descr']))
+    descr_to_val = dict(zip(dic_units['descr'], dic_units['val']))
 
     picked_unit_name = st.selectbox(
         'Wich energy source would you like to view?',
