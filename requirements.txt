@@ -3,3 +3,4 @@ pandas
 eurostat
 geopandas
 folium
+streamlit_folium
