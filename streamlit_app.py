@@ -138,6 +138,11 @@ with st.sidebar:
         format="YYYY-MM"
     )
     st.write(f'from: {from_date} to: {to_date}.')
+    from_date = from_date.replace(day=1)
+    to_date = to_date.replace(day=1)
+
+    st.write(f'NEW: from: {from_date} to: {to_date}.')
+    
     countries = df_eust['geo'].unique()
     
     if not len(countries):
