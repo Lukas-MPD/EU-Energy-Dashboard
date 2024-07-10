@@ -234,7 +234,7 @@ with col1:
     
     folium_static(m)
 
-    #st_folium(m)
+    st_folium(m)
     #first_year = gdp_df[gdp_df['Year'] == from_year]
     #last_year = gdp_df[gdp_df['Year'] == to_year]
     
