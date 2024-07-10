@@ -206,6 +206,8 @@ with col1:
     m = folium.Map(location=[54.5260, 15.2551], zoom_start=4)
     
     # Add a choropleth layer to the map
+
+    """
     folium.Choropleth(
         geo_data=geojson_data,
         data=merged,
@@ -216,7 +218,7 @@ with col1:
         line_opacity=0.2,
         legend_name='Legend Name'
     ).add_to(m)
-
+"""
     st_folium(m)
     
     #first_year = gdp_df[gdp_df['Year'] == from_year]
