@@ -137,7 +137,7 @@ with st.sidebar:
         value=(min(df_eust['year_month']), max(df_eust['year_month'])),
         format="YYYY-MM"
     )
-
+    st.write(f'from: {from_date} to: {to_date}.')
     countries = df_eust['geo'].unique()
     
     if not len(countries):
