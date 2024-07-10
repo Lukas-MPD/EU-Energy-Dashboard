@@ -164,8 +164,8 @@ with st.sidebar:
 
     picked_unit_name = st.selectbox(
         'Wich energy source would you like to view?',
-        df_units['descr'],
-        index=df_units['descr'].tolist().index('Total')
+        dic_units['descr'],
+        index=dic_units['descr'].tolist().index('Total')
     )
     picked_unit = descr_to_val[picked_unit_name]
     picked_unit = picked_unit + '_GWH'
