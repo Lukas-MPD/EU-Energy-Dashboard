@@ -216,6 +216,8 @@ with col1:
         line_opacity=0.2,
         legend_name='Legend Name'
     ).add_to(m)
+
+    st_folium(m, width=700, height=500)
     
     #first_year = gdp_df[gdp_df['Year'] == from_year]
     #last_year = gdp_df[gdp_df['Year'] == to_year]
