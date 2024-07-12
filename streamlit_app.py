@@ -181,9 +181,14 @@ with st.sidebar:
         filtered_dic_countries['descr'],
         filtered_dic_countries['descr']
     )
+
+    st.write(selected_countries)
+    
+    selected_countries_code = [filtered_country_to_code[descr] for descr in selected_countries if descr in filtered_country_to_code]
+
     
     filtered_df_eust = df_eust[
-        (df_eust['geo'].isin(selected_countries))
+        (df_eust['geo'].isin(selected_countries_code))
         & (df_eust['year_month'] <= to_date)
         & (from_date <= df_eust['year_month'])
     ]
