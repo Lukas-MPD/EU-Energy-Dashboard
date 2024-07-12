@@ -66,6 +66,7 @@ def get_gdp_data():
 
     return gdp_df
 
+@st.cache_data
 def get_eust_data(dataframe: str):
     data = eust.get_data_df(dataframe)
 
