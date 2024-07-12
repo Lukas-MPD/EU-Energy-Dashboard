@@ -106,6 +106,25 @@ def get_nuts():
     nuts = nuts.query('LEVL_CODE == 0')
     return nuts
 
+@st.cache_data
+def dic_units(df_name):
+    dic_units = eust.get_dic(df_name, 'siec', frmt='df')
+
+    # create dictionary
+    descr_to_val = dict(zip(dic_units['descr'], dic_units['val']))
+
+    return descr_to_val
+
+
+@st.cache_data
+def dic_countries(df_name):
+    dic_dic_countries = eust.get_dic(df_name, 'geo', frmt='df')
+
+    # create dictionary
+    descr_to_val = dict(zip(dic_units['descr'], dic_units['val']))
+
+    return descr_to_val
+
 # -----------------------------------------------------------------------------
 # Draw the actual page
 
@@ -154,24 +173,24 @@ with st.sidebar:
         countries,
         countries)
 
+    st.write(dic_countries(df_name))
+    
     filtered_df_eust = df_eust[
         (df_eust['geo'].isin(selected_countries))
         & (df_eust['year_month'] <= to_date)
         & (from_date <= df_eust['year_month'])
     ]
 
-    dic_units = eust.get_dic(df_name, 'siec', frmt='df')
-
-    #st.write(dic_units)
-
-    descr_to_val = dict(zip(dic_units['descr'], dic_units['val']))
+    # create dictionary
+    descr_to_val = dic_units(df_name)
     
     # Exclude 'geo' and 'year_month' from the available siec values
     available_siec_values = df_eust.columns.difference(['geo', 'year_month']).tolist()
     
     # Filter dic_units based on available siec values
     filtered_dic_units = dic_units[dic_units['val'].isin(available_siec_values)]
-    
+
+    # create dictionary
     filtered_descr_to_val = dict(zip(filtered_dic_units['descr'], filtered_dic_units['val']))
     
     #st.write(filtered_dic_units)
