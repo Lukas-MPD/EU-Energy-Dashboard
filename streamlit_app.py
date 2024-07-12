@@ -125,6 +125,17 @@ def dic_countries(df_name):
 
     return dic_countries, country_to_code
 
+@st.cache_data
+def get_toc():
+    toc = eurostat.get_toc_df()
+
+    available_datasets = ['nrg_cb_pem']
+
+    filtered_toc = toc[toc['code'].isin(available_datasets)]
+
+    return filtered_toc
+
+
 # -----------------------------------------------------------------------------
 # Draw the actual page
 
@@ -146,7 +157,15 @@ col1, col2 = st.columns(2)
 
 with st.sidebar:
 
-    df_name = 'nrg_cb_pem'
+    toc = get_toc()
+
+    st.write(toc)
+    
+    df_name = st.selectbox(
+        'Which dataset would you like to view?',
+        filtered_dic_units['descr'],
+        index=filtered_dic_units['descr'].tolist().index('Total')
+    )
 
     df_eust, dic_eust = get_eust_data(df_name)
     
@@ -182,11 +201,11 @@ with st.sidebar:
         filtered_dic_countries['descr']
     )
 
-    st.write(selected_countries)
+    #st.write(selected_countries)
     
     selected_countries_code = [filtered_country_to_code[descr] for descr in selected_countries if descr in filtered_country_to_code]
 
-    st.write(selected_countries_code)
+    #st.write(selected_countries_code)
     
     filtered_df_eust = df_eust[
         (df_eust['geo'].isin(selected_countries_code))
