@@ -267,7 +267,7 @@ with col1:
     nuts = get_nuts()
 
     oneYear_df_eust = df_eust[
-        (df_eust['geo'].isin(selected_countries))
+        (df_eust['geo'].isin(selected_countries_code))
         & (df_eust['year_month'] == to_date)
     ]
     #st.write(oneYear_df_eust)
