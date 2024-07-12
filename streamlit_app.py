@@ -157,7 +157,7 @@ col1, col2 = st.columns(2)
 
 with st.sidebar:
 
-    toc = get_toc()
+    #toc = get_toc()
 
     st.write(toc)
     
