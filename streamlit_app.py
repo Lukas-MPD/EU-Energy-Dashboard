@@ -121,7 +121,7 @@ def dic_countries(df_name):
     dic_countries = eust.get_dic(df_name, 'geo', frmt='df')
 
     # create dictionary
-    descr_to_val = dict(zip(dic_countries['descr'], dic_countries['val']))
+    country_to_code = dict(zip(dic_countries['descr'], dic_countries['val']))
 
     return dic_countries, country_to_code
 
@@ -163,7 +163,7 @@ with st.sidebar:
 
     #st.write(f'NEW: from: {from_date} to: {to_date}.')
     
-    countries = df_eust['geo'].unique()
+    countries = df_eust['geo'].unique().tolist()
 
     st.write(countries)
     
