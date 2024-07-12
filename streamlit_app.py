@@ -180,6 +180,7 @@ with st.sidebar:
         'Which countries would you like to view?',
         filtered_dic_countries['descr'],
         index=filtered_dic_countries['descr'].tolist()
+    )
     
     filtered_df_eust = df_eust[
         (df_eust['geo'].isin(selected_countries))
