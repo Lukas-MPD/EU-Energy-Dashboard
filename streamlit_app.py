@@ -165,19 +165,21 @@ with st.sidebar:
     
     countries = df_eust['geo'].unique().tolist()
 
-    st.write(countries)
+    # st.write(countries)
     
     dic_countries, country_to_code = dic_countries(df_name)
 
+    filtered_dic_countries = dic_countries[dic_countries['val'].isin(countries)]
 
+    filtered_country_to_code = dict(zip(filtered_dic_countries['descr'], filtered_dic_countries['val']))
     
     if not len(countries):
         st.warning("Select at least one country")
     
     selected_countries = st.multiselect(
         'Which countries would you like to view?',
-        countries,
-        countries)
+        filtered_dic_countries['descr'],
+        index=filtered_dic_countries['descr'].tolist()
     
     filtered_df_eust = df_eust[
         (df_eust['geo'].isin(selected_countries))
