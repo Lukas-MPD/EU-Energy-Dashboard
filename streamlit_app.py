@@ -123,7 +123,7 @@ def dic_countries(df_name):
     # create dictionary
     descr_to_val = dict(zip(dic_countries['descr'], dic_countries['val']))
 
-    return descr_to_val
+    return dic_countries, country_to_code
 
 # -----------------------------------------------------------------------------
 # Draw the actual page
@@ -164,6 +164,12 @@ with st.sidebar:
     #st.write(f'NEW: from: {from_date} to: {to_date}.')
     
     countries = df_eust['geo'].unique()
+
+    st.write(countries)
+    
+    dic_countries, country_to_code = dic_countries(df_name)
+
+
     
     if not len(countries):
         st.warning("Select at least one country")
@@ -172,8 +178,6 @@ with st.sidebar:
         'Which countries would you like to view?',
         countries,
         countries)
-
-    st.write(dic_countries(df_name))
     
     filtered_df_eust = df_eust[
         (df_eust['geo'].isin(selected_countries))
