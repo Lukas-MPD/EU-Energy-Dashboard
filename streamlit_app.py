@@ -118,10 +118,10 @@ def dic_units(df_name):
 
 @st.cache_data
 def dic_countries(df_name):
-    dic_dic_countries = eust.get_dic(df_name, 'geo', frmt='df')
+    dic_countries = eust.get_dic(df_name, 'geo', frmt='df')
 
     # create dictionary
-    descr_to_val = dict(zip(dic_units['descr'], dic_units['val']))
+    descr_to_val = dict(zip(dic_countries['descr'], dic_countries['val']))
 
     return descr_to_val
 
