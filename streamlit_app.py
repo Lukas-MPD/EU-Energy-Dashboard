@@ -186,6 +186,7 @@ with st.sidebar:
     
     selected_countries_code = [filtered_country_to_code[descr] for descr in selected_countries if descr in filtered_country_to_code]
 
+    st.write(selected_countries_code)
     
     filtered_df_eust = df_eust[
         (df_eust['geo'].isin(selected_countries_code))
