@@ -127,7 +127,7 @@ def dic_countries(df_name):
 
 @st.cache_data
 def get_toc():
-    toc = eurostat.get_toc_df()
+    toc = eust.get_toc_df()
 
     available_datasets = ['nrg_cb_pem']
 
