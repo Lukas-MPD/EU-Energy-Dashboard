@@ -179,7 +179,7 @@ with st.sidebar:
     selected_countries = st.multiselect(
         'Which countries would you like to view?',
         filtered_dic_countries['descr'],
-        index=filtered_dic_countries['descr'].tolist()
+        filtered_dic_countries['descr']
     )
     
     filtered_df_eust = df_eust[
