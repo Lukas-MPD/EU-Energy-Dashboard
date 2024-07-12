@@ -113,7 +113,7 @@ def dic_units(df_name):
     # create dictionary
     descr_to_val = dict(zip(dic_units['descr'], dic_units['val']))
 
-    return descr_to_val
+    return dic_units, descr_to_val
 
 
 @st.cache_data
@@ -182,7 +182,7 @@ with st.sidebar:
     ]
 
     # create dictionary
-    descr_to_val = dic_units(df_name)
+    dic_units, descr_to_val = dic_units(df_name)
     
     # Exclude 'geo' and 'year_month' from the available siec values
     available_siec_values = df_eust.columns.difference(['geo', 'year_month']).tolist()
