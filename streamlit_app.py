@@ -217,14 +217,20 @@ with st.sidebar:
 
     st.write(toc_names)
     
-    df_name = 'nrg_cb_pem'
+    # df_name = 'nrg_cb_pem'
 
-    #df_name = st.selectbox(
-    #    'Which dataset would you like to view?',
-    #    toc_names,
-    #    'nrg_cb_pem'
-    #)
+    df_name_long = st.selectbox(
+        'Which dataset would you like to view?',
+        toc_names,
+        'Net electricity generation by type of fuel - monthly data'
+    )
 
+    st.write(f"{df_name_long} is beeing displayed")
+    
+    df_name = toc[df_name_long]['code']
+
+    st.write(f"{df_name} is the code for the dataset")
+    
     df_eust, dic_eust = get_eust_data(df_name)
     
     from_date, to_date = st.slider(
