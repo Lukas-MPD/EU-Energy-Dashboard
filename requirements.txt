@@ -4,5 +4,4 @@ eurostat
 geopandas
 folium
 streamlit_folium
-xml
-requests
+
