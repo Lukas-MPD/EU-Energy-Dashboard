@@ -221,7 +221,8 @@ with st.sidebar:
 
     df_name_long = st.selectbox(
         'Which dataset would you like to view?',
-        toc_names
+        toc_names,
+        index = toc_names.index('Net electricity generation by type of fuel - monthly data')
     )
 
     st.write(f"{df_name_long} is beeing displayed")
