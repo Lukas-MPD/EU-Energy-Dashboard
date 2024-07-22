@@ -10,6 +10,8 @@ import folium
 from streamlit_folium import folium_static
 from streamlit_folium import st_folium
 import streamlit.components.v1 as components
+import xml.etree.ElementTree as ET
+import requests
 
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
@@ -82,14 +84,113 @@ def dic_countries(df_name):
 
 @st.cache_data
 def get_toc():
-    toc = eust.get_toc_df()
 
-    available_datasets = ['nrg_cb_pem']
-
-    filtered_toc = toc[toc['code'].isin(available_datasets)]
-
-    return filtered_toc
-
+    def parse_xml_to_dict(element):
+        data_dict = {}
+        # Parse attributes of the current element
+        data_dict.update(element.attrib)
+    
+        # Parse text content of the current element
+        if element.text and element.text.strip():
+            data_dict['text'] = element.text.strip()
+    
+        # Parse child elements
+        children = list(element)
+        if children:
+            child_dict = {}
+            for child in children:
+                child_tag = child.tag.split('}')[-1]  # Strip namespace
+                child_dict.setdefault(child_tag, []).append(parse_xml_to_dict(child))
+            data_dict.update(child_dict)
+    
+        return data_dict
+    
+    def find_branch_with_code(element, target_code):
+        for child in element:
+            # Check if this is a <nt:code> element and if its text matches the target_code
+            if child.tag.endswith('code') and child.text == target_code:
+                return element
+            # Recursively search in child elements
+            result = find_branch_with_code(child, target_code)
+            if result is not None:
+                return result
+        return None
+    
+    def extract_datasets(data_dict):
+        datasets = {}
+        
+        def recursive_extract(element):
+            # Check if the current element is of type "dataset"
+            if 'type' in element and element['type'] == 'dataset':
+                title = None
+                # Extract required fields
+                code = element.get('code')[0]['text']
+                last_update = element.get('lastUpdate')[0]['text']
+                last_modified = element.get('lastModified')[0]['text']
+                data_start = element.get('dataStart')[0]['text']
+                data_end = element.get('dataEnd')[0]['text']
+                values = element.get('values')[0]['text']
+                metadata = next((meta['text'] for meta in element.get('metadata', []) if meta.get('format') == 'html'), None)
+                download_link = next((link['text'] for link in element.get('downloadLink', []) if link.get('format') == 'tsv'), None)
+    
+                # Find the title in English
+                for title_element in element.get('title', []):
+                    if title_element['language'] == 'en':
+                        title = title_element['text']
+                        break
+                
+                # If title is found, add to the datasets dictionary
+                if title:
+                    datasets[title] = {
+                        'code': code,
+                        'lastUpdate': last_update,
+                        'lastModified': last_modified,
+                        'dataStart': data_start,
+                        'dataEnd': data_end,
+                        'values': values,
+                        'metadata': metadata,
+                        'downloadLink': download_link
+                    }
+            
+            # Recursively process child elements
+            for key, value in element.items():
+                if isinstance(value, list):
+                    for child in value:
+                        if isinstance(child, dict):
+                            recursive_extract(child)
+        
+        # Start the recursion with the top-level dictionary
+        recursive_extract(data_dict)
+        return datasets
+    
+    # Function to get Eurostat TOC XML
+    def get_eurostat_toc_xml():
+        url = 'https://ec.europa.eu/eurostat/api/dissemination/catalogue/toc/xml'
+        response = requests.get(url)
+        response.raise_for_status()  # Ensure we notice bad responses
+        return response.content
+    
+    # Get XML data
+    xml_data = get_eurostat_toc_xml()
+     
+    # Parse the XML data
+    root = ET.fromstring(xml_data)
+    
+    # Find the branch with the target <nt:code> value
+    target_code = 'nrg'
+    target_branch = find_branch_with_code(root, target_code)
+    
+    # Parse the target branch to a dictionary if found
+    if target_branch is not None:
+        data_dict = parse_xml_to_dict(target_branch)
+    else:
+        data_dict = {}
+    
+    # Extract datasets from the parsed data
+    datasets_dict = extract_datasets(data_dict)
+    
+    # Inspect the parsed data
+    return datasets_dict, list(datasets_dict.keys())
 
 # -----------------------------------------------------------------------------
 # Draw the actual page
@@ -112,11 +213,17 @@ col1, col2 = st.columns(2)
 
 with st.sidebar:
 
-    #toc = get_toc()
+    toc, toc_names = get_toc()
 
     # st.write(toc)
     
-    df_name = 'nrg_cb_pem'
+    # df_name = 'nrg_cb_pem'
+
+    df_name = st.selectbox(
+        'Which dataset would you like to view?',
+        toc_names,
+        'nrg_cb_pem'
+    )
 
     df_eust, dic_eust = get_eust_data(df_name)
     
