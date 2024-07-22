@@ -169,7 +169,10 @@ def get_toc():
         response = requests.get(url)
         response.raise_for_status()  # Ensure we notice bad responses
         return response.content
-    
+
+    def filter_dict_by_codes(data, codes):
+        return {k: v for k, v in data.items() if v['code'] in codes}
+        
     # Get XML data
     xml_data = get_eurostat_toc_xml()
      
@@ -188,6 +191,12 @@ def get_toc():
     
     # Extract datasets from the parsed data
     datasets_dict = extract_datasets(data_dict)
+
+    codes = ['nrg_chdd_m', 'nrg_cb_sffm', 'nrg_cb_oilm', 'nrg_cb_cosm', 'nrg_cb_gasm', 'nrg_cb_em', 'nrg_cb_eim',
+'nrg_cb_pem', 'nrg_t_m', 'nrg_ti_m', 'nrg_ti_oilm', 'nrg_ti_gasm', 'nrg_ti_coifpm', 'nrg_te_m', 'nrg_te_oilm',
+'nrg_te_gasm', 'nrg_stk_m', 'nrg_stk_oilm', 'nrg_stk_oom', 'nrg_stk_oam', 'nrg_stk_oem', 'nrg_stk_gasm']
+    
+    datasets_dict = filter_dict_by_codes(datasets_dict, codes)
     
     # Inspect the parsed data
     return datasets_dict, list(datasets_dict.keys())
