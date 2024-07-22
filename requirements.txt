@@ -4,3 +4,5 @@ eurostat
 geopandas
 folium
 streamlit_folium
+xml.etree.ElementTree
+requests
