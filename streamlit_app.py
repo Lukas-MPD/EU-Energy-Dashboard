@@ -215,15 +215,15 @@ with st.sidebar:
 
     toc, toc_names = get_toc()
 
-    # st.write(toc)
+    st.write(toc_names)
     
-    # df_name = 'nrg_cb_pem'
+    df_name = 'nrg_cb_pem'
 
-    df_name = st.selectbox(
-        'Which dataset would you like to view?',
-        toc_names,
-        'nrg_cb_pem'
-    )
+    #df_name = st.selectbox(
+    #    'Which dataset would you like to view?',
+    #    toc_names,
+    #    'nrg_cb_pem'
+    #)
 
     df_eust, dic_eust = get_eust_data(df_name)
     
