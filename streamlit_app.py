@@ -287,7 +287,7 @@ with st.sidebar:
 
     #st.write(selected_countries_code)
     
-    lst_vars = dic_df.keys()
+    lst_vars = list(dic_df.keys())
     lst_vars_selec = lst_vars.remove('geo')
     lst_vars_selec.remove('unit')
 
