@@ -374,12 +374,12 @@ with col1:
         (df_eust['geo'].isin(selected_countries_code))
         & (df_eust['year_month'] == to_date)
     ]
-    #st.write(oneYear_df_eust)
+    st.write(oneYear_df_eust)
     merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
-    #st.write(merged)
+    st.write(merged)
     # Ensure the GeoDataFrame contains only necessary columns
     merged = merged[['CNTR_CODE', picked_unit, 'geometry']]
-    #st.write(merged)
+    st.write(merged)
     # Convert GeoDataFrame to GeoJSON
     geojson_data = merged.to_json()
     #st.write(geojson_data)
