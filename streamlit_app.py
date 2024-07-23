@@ -328,7 +328,7 @@ with st.sidebar:
         df_filterd = df_filterd[df_filterd[key].isin(temp_filt)]
         st.write(temp_filt)
         st.write(key)
-        st.write(dict_filters)
+        st.write(df_filterd)
 
 
     st.write(df_filterd)
