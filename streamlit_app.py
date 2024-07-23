@@ -318,12 +318,17 @@ with st.sidebar:
     ]
 
     st.write(df_filterd)
+
+    st.write(dict_filters)
     
     for key in dict_filters:
         temp_filt = dict_filters[key]
         if type(temp_filt) == str:
             temp_filt = [temp_filt,]
         df_filterd = df_filterd[df_filterd[key].isin(temp_filt)]
+        st.write(temp_filt)
+        st.write(key)
+        st.write(dict_filters)
 
 
     st.write(df_filterd)
