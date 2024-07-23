@@ -283,8 +283,8 @@ with st.sidebar:
                 f'Pick {var_name}:',
                 values
             )
-        
-        dict_filters.update({i: selection})
+        selec = [subkey for subkey, val in dic_df[i]['pars'].items() if val == selection]
+        dict_filters.update({i: selec})
 
         if dic_df[i]['descr'] is not None:
             st.write(dic_df[i]['descr'])
