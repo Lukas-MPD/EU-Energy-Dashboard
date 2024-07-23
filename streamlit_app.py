@@ -290,7 +290,8 @@ with st.sidebar:
     lst_vars = list(dic_df.keys())
     st.write(lst_vars)
     st.write(type(lst_vars))
-    lst_vars_selec = lst_vars.remove('geo')
+    lst_vars_selec = lst_vars
+    lst_vars_selec.remove('geo')
     st.write(lst_vars_selec)
     st.write(type(lst_vars_selec))
     lst_vars_selec.remove('unit')
