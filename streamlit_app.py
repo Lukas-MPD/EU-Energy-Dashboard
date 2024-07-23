@@ -320,7 +320,7 @@ with st.sidebar:
 
     #st.write(picked_unit_name)
     
-    picked_unit = filtered_descr_to_val[picked_unit_name[0]]
+    picked_unit = filtered_descr_to_val[picked_unit_name]
 
     #st.write(picked_unit)
     
