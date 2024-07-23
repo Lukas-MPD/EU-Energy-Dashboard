@@ -291,12 +291,12 @@ with st.sidebar:
     selected_countries_code = [filtered_country_to_code[descr] for descr in selected_countries if descr in filtered_country_to_code]
 
     #st.write(selected_countries_code)
-    for i in range(2):
-        filtered_df_eust = df_eust[
-            (df_eust['geo'].isin(selected_countries_code))
-            & (df_eust['year_month'] <= to_date)
-            & (from_date <= df_eust['year_month'])
-        ]
+    
+    filtered_df_eust = df_eust[
+        (df_eust['geo'].isin(selected_countries_code))
+        & (df_eust['year_month'] <= to_date)
+        & (from_date <= df_eust['year_month'])
+    ]
 
     # create dictionary
     dic_units, descr_to_val = dic_units(df_name)
@@ -311,12 +311,12 @@ with st.sidebar:
     filtered_descr_to_val = dict(zip(filtered_dic_units['descr'], filtered_dic_units['val']))
     
     #st.write(filtered_dic_units)
-    
-    picked_unit_name = st.selectbox(
-        'Which energy source would you like to view?',
-        filtered_dic_units['descr'],
-        index=filtered_dic_units['descr'].tolist().index('Total')
-    )
+    for i in range(2):
+        picked_unit_name = st.selectbox(
+            'Which energy source would you like to view?',
+            filtered_dic_units['descr'],
+            index=filtered_dic_units['descr'].tolist().index('Total')
+        )
 
     #st.write(picked_unit_name)
     
