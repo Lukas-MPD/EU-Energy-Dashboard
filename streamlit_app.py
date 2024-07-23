@@ -317,15 +317,17 @@ with st.sidebar:
         (df_eust['date'] <= to_date)
     ]
 
+    st.write(df_filterd)
+    
     for key in dict_filters:
         temp_filt = dict_filters[key]
-        print(temp_filt)
         if type(temp_filt) == str:
             temp_filt = [temp_filt,]
-            print(temp_filt)
         df_filterd = df_filterd[df_filterd[key].isin(temp_filt)]
-        print(df_filterd)
 
+
+    st.write(df_filterd)
+    
     units = df_filterd['unit'].unique()
 
     units = units.tolist()
@@ -339,7 +341,7 @@ with st.sidebar:
         df_filterd = df_filterd[df_filterd['unit'] == selection]
 
     
-    
+    st.write(df_filterd)
     unit = df_filterd['unit'].unique()
 
     st.write(f"unit type: {type(unit)}, unit: {unit}")
