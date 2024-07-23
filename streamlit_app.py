@@ -272,8 +272,7 @@ with st.sidebar:
 
     #st.write(selected_countries_code)
     
-    lst_vars = list(dic_df.keys())
-    lst_vars_selec = lst_vars
+    lst_vars_selec = list(dic_df.keys())
     lst_vars_selec.remove('geo')
     lst_vars_selec.remove('unit')
 
@@ -304,11 +303,13 @@ with st.sidebar:
     #st.write(selected_countries)
 
     selected_countries_code = [i for i in dic_df['geo']['pars'] if dic_df['geo']['pars'][i] in selected_countries]
-
+    
     dict_filters.update({'geo': selected_countries_code})
     
     #st.write(picked_unit)
 
+    lst_vars = list(dic_df.keys())
+    
     df_eust = get_eust_data(df_name, lst_vars)
 
     df_filterd = df_eust[
