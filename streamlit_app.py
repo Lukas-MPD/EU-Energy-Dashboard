@@ -293,8 +293,9 @@ with st.sidebar:
 
     for i in lst_vars_selec:
         values = [value for value in dic_df[i]['pars'].values()]
+        var_name = dic_df[i]['name']
         selection = st.selectbox(
-                f'Pick {dic_df[i]['name']}:',
+                f'Pick {var_name}:',
                 values
             )
         
