@@ -309,18 +309,20 @@ with st.sidebar:
 
     # create dictionary
     filtered_descr_to_val = dict(zip(filtered_dic_units['descr'], filtered_dic_units['val']))
+
+    picked_unit_name = []
     
     #st.write(filtered_dic_units)
     for i in range(2):
-        picked_unit_name = st.selectbox(
-            'Which energy source would you like to view?',
+        picked_unit_name[i] = st.selectbox(
+            f"Nr. {i}: Which energy source would you like to view?",
             filtered_dic_units['descr'],
             index=filtered_dic_units['descr'].tolist().index('Total')
         )
 
     #st.write(picked_unit_name)
     
-    picked_unit = filtered_descr_to_val[picked_unit_name]
+    picked_unit = filtered_descr_to_val[picked_unit_name][0]
 
     #st.write(picked_unit)
     
