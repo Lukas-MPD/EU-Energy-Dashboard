@@ -281,7 +281,7 @@ with st.sidebar:
     
     dict_filters = {}
 
-    selected_countries_code = [i for i in toc['geo']['pars'] if toc['geo']['pars'][i] in selected_countries]
+    selected_countries_code = [i for i in dic_df['geo']['pars'] if dic_df['geo']['pars'][i] in selected_countries]
 
     dict_filters.update({'geo': selected_countries_code})
 
