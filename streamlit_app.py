@@ -340,7 +340,7 @@ with st.sidebar:
     
     unit = df_filterd['unit'].unique()
 
-    unit = units.tolist()[0]
+    unit = unit.tolist()[0]
 
     dict_filters.update({'unit': unit})
 
