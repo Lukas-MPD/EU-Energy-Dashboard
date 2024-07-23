@@ -82,6 +82,18 @@ def dic_countries(df_name):
 
     return dic_countries, country_to_code
 
+def get_dic_df(df_name):
+   
+    dic_df = eust.get_dic(df_name, frmt='dict')
+    
+    for key in dic_df:
+        temp = eust.get_dic(df_name, key, frmt='dict', full = False)
+        temp_key = dic_df[key]
+        temp_key.update({'pars': temp})
+        dic_df.update({key: temp_key})
+
+    return dic_df
+
 @st.cache_data
 def get_toc():
 
