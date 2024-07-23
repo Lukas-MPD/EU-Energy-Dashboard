@@ -24,37 +24,25 @@ st.set_page_config(
 # Declare some useful functions.
 
 @st.cache_data
-def get_eust_data(dataframe: str):
+def get_eust_data(dataframe: str, lst_vars: list):
     data = eust.get_data_df(dataframe)
 
     df = pd.DataFrame(data)
-    
+
     # Rename the column 'geo\\TIME_PERIOD' to 'geo'
     df.rename(columns={'geo\\TIME_PERIOD': 'geo'}, inplace=True)
 
-    # Drop the column 'freq'
-    df = df.drop(columns=['freq'])
-    
     # Melt the dataframe to long format
-    df_melted = pd.melt(df, id_vars=['siec', 'unit', 'geo'], var_name='year_month', value_name='value')
-    
-    # Pivot the dataframe so that the combined 'siec_unit' values become columns
-    df_pivoted = df_melted.pivot_table(index=['year_month', 'geo'], columns='siec', values='value').reset_index()
-    
-    # Flatten the columns after pivoting
-    df_pivoted.columns.name = None
+    df_melted = pd.melt(df, id_vars=lst_vars, var_name='date', value_name='value')
 
-    # Convert 'year_month' to datetime objects
-    df_pivoted['year_month'] = pd.to_datetime(df_pivoted['year_month'])
-    
+    # Convert 'date' to datetime objects
+    df_melted['date'] = pd.to_datetime(df_melted['date'])
+
     # Extract date part (datetime.date objects)
-    df_pivoted['year_month'] = df_pivoted['year_month'].dt.date
-
-    # Create a dictionary mapping siec to unit
-    siec_unit_dict = df_melted.set_index('siec')['unit'].to_dict()
+    df_melted['date'] = df_melted['date'].dt.date
     
     # Display the transformed dataframe
-    return df_pivoted, siec_unit_dict
+    return df_melted
 
 @st.cache_data
 def get_nuts():
@@ -151,10 +139,10 @@ def get_toc():
                         title = title_element['text']
                         break
                 
-                # If title is found, add to the datasets dictionary
-                if title:
-                    datasets[title] = {
-                        'code': code,
+                # If code is found, add to the datasets dictionary
+                if code:
+                    datasets[code] = {
+                        'title': title,
                         'lastUpdate': last_update,
                         'lastModified': last_modified,
                         'dataStart': data_start,
@@ -165,7 +153,7 @@ def get_toc():
                     }
             
             # Recursively process child elements
-            for key, value in element.items():
+            for key, value in element.items(): # why is key not used but written?
                 if isinstance(value, list):
                     for child in value:
                         if isinstance(child, dict):
@@ -210,8 +198,14 @@ def get_toc():
     
     datasets_dict = filter_dict_by_codes(datasets_dict, codes)
     
+    toc_names = []
+
+    for key in datasets_dict:
+        temp = datasets_dict[key]['title']
+        toc_names += [temp,]
+
     # Inspect the parsed data
-    return datasets_dict, list(datasets_dict.keys())
+    return datasets_dict, toc_names
 
 # -----------------------------------------------------------------------------
 # Draw the actual page
@@ -246,19 +240,22 @@ with st.sidebar:
         index = toc_names.index('Net electricity generation by type of fuel - monthly data')
     )
 
-    st.write(f"{df_name_long} is beeing displayed")
+    # st.write(f"{df_name_long} is beeing displayed")
     
-    df_name = toc[df_name_long]['code']
+    df_name = [i for i in toc if toc[i]['title']==df_name_long][0]
 
-    st.write(f"{df_name} is the code for the dataset")
+    dic_df = get_dic_df(df_name)
+
+    # st.write(f"{df_name} is the code for the dataset")
     
-    df_eust, dic_eust = get_eust_data(df_name)
+    data_start = datetime.strptime(toc[df_name]['dataStart'], '%Y-%m').date()
+    data_end = datetime.strptime(toc[df_name]['dataEnd'], '%Y-%m').date()
     
     from_date, to_date = st.slider(
         'Which dates are you interested in?',
-        min_value=min(df_eust['year_month']),
-        max_value=max(df_eust['year_month']),
-        value=(min(df_eust['year_month']), max(df_eust['year_month'])),
+        min_value= data_start,
+        max_value= data_end,
+        value=(data_start, data_end),
         format="YYYY-MM"
     )
     #st.write(f'from: {from_date} to: {to_date}.')
@@ -267,63 +264,84 @@ with st.sidebar:
 
     #st.write(f'NEW: from: {from_date} to: {to_date}.')
     
-    countries = df_eust['geo'].unique().tolist()
-
     # st.write(countries)
     
-    dic_countries, country_to_code = dic_countries(df_name)
-
-    filtered_dic_countries = dic_countries[dic_countries['val'].isin(countries)]
-
-    filtered_country_to_code = dict(zip(filtered_dic_countries['descr'], filtered_dic_countries['val']))
-    
-    if not len(countries):
-        st.warning("Select at least one country")
+    countries = [value for value in dic_df['geo']['pars'].values()]
     
     selected_countries = st.multiselect(
         'Which countries would you like to view?',
-        filtered_dic_countries['descr'],
-        filtered_dic_countries['descr']
+        countries,
+        countries
     )
+
+    if not len(selected_countries):
+        st.warning("Select at least one country")
 
     #st.write(selected_countries)
     
-    selected_countries_code = [filtered_country_to_code[descr] for descr in selected_countries if descr in filtered_country_to_code]
+    dict_filters = {}
+
+    selected_countries_code = [i for i in toc['geo']['pars'] if toc['geo']['pars'][i] in selected_countries]
+
+    dict_filters.update({'geo': selected_countries_code})
 
     #st.write(selected_countries_code)
     
-    filtered_df_eust = df_eust[
-        (df_eust['geo'].isin(selected_countries_code))
-        & (df_eust['year_month'] <= to_date)
-        & (from_date <= df_eust['year_month'])
-    ]
+    lst_vars = dic_df.keys()
+    lst_vars_selec = lst_vars.remove('geo')
+    lst_vars_selec.remove('unit')
 
-    # create dictionary
-    dic_units, descr_to_val = dic_units(df_name)
-    
-    # Exclude 'geo' and 'year_month' from the available siec values
-    available_siec_values = df_eust.columns.difference(['geo', 'year_month']).tolist()
-    
-    # Filter dic_units based on available siec values
-    filtered_dic_units = dic_units[dic_units['val'].isin(available_siec_values)]
+    for i in lst_vars_selec:
+        values = [value for value in dic_df[i]['pars'].values()]
+        selection = st.selectbox(
+                f'Pick {dic_df[i]['name']}:',
+                values
+            )
+        
+        dict_filters.update({i: selection})
 
-    # create dictionary
-    filtered_descr_to_val = dict(zip(filtered_dic_units['descr'], filtered_dic_units['val']))
-    
-    #st.write(filtered_dic_units)
-    for i in range(2):
-        picked_unit_name = st.selectbox(
-            f"Nr. {i}: Which energy source would you like to view?",
-            filtered_dic_units['descr'],
-            index=filtered_dic_units['descr'].tolist().index('Total')
-        )
+        if dic_df[i]['descr'] is not None:
+            st.write(dic_df[i]['descr'])
 
-    #st.write(picked_unit_name)
-    
-    picked_unit = filtered_descr_to_val[picked_unit_name]
 
     #st.write(picked_unit)
+
+    df_eust = get_eust_data(df_name, lst_vars)
+
+    df_filterd = df_eust[
+        (df_eust['date'] >= from_date)&
+        (df_eust['date'] <= to_date)
+    ]
+
+    for key in dict_filters:
+        temp_filt = dict_filters[key]
+        print(temp_filt)
+        if type(temp_filt) == str:
+            temp_filt = [temp_filt,]
+            print(temp_filt)
+        df_filterd = df_filterd[df_filterd[key].isin(temp_filt)]
+        print(df_filterd)
+
+    units = df_filterd['unit'].unique()
+
+    units = units.tolist()
     
+    if len(units) > 1:
+        selection = st.selectbox(
+            f'Pick Unit:',
+            units
+        )
+
+        df_filterd = df_filterd[df_filterd['unit'] == selection]
+    
+    unit = df_filterd['unit'].unique()
+
+    unit = units.tolist()[0]
+
+    dict_filters.update({'unit': unit})
+
+
+
 # Add content to the first column
 with col1:
     
@@ -370,16 +388,14 @@ with col1:
 
     nuts = get_nuts()
 
-    oneYear_df_eust = df_eust[
-        (df_eust['geo'].isin(selected_countries_code))
-        & (df_eust['year_month'] == to_date)
-    ]
-    st.write(oneYear_df_eust)
+    oneYear_df_eust = df_filterd[df_eust['date'] == to_date]
+
+    #st.write(oneYear_df_eust)
     merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
-    st.write(merged)
+    #st.write(merged)
     # Ensure the GeoDataFrame contains only necessary columns
-    merged = merged[['CNTR_CODE', picked_unit, 'geometry']]
-    st.write(merged)
+    merged = merged[['CNTR_CODE', 'value', 'geometry']]
+    #st.write(merged)
     # Convert GeoDataFrame to GeoJSON
     geojson_data = merged.to_json()
     #st.write(geojson_data)
@@ -399,7 +415,7 @@ with col1:
     folium.Choropleth(
         geo_data=geojson_data,
         data=merged,
-        columns=['CNTR_CODE', picked_unit],
+        columns=['CNTR_CODE', 'value'],
         key_on='feature.properties.CNTR_CODE',
         fill_color='YlOrRd',
         fill_opacity=0.7,
@@ -430,7 +446,7 @@ with col2:
     # Display the selected dates
     #st.write(f'From date: {from_date} to date: {to_date}')
 
-    st.line_chart(filtered_df_eust, x='year_month', y=picked_unit,color='geo')
+    st.line_chart(df_filterd, x='date', y='value',color='geo')
 
 
         
@@ -442,4 +458,3 @@ with col2:
     
     # call to render Folium map in Streamlit
     #st_data = st_folium(m, width=725)
-
