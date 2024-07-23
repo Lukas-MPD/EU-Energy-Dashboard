@@ -34,7 +34,7 @@ def get_eust_data(dataframe: str, lst_vars: list):
 
     # Melt the dataframe to long format
     df_melted = pd.melt(df, id_vars=lst_vars, var_name='date', value_name='value')
-
+    st.write(lst_vars)
     st.write(df_melted)
     
     # Convert 'date' to datetime objects
