@@ -288,8 +288,14 @@ with st.sidebar:
     #st.write(selected_countries_code)
     
     lst_vars = list(dic_df.keys())
+    st.write(lst_vars)
+    st.write(type(lst_vars))
     lst_vars_selec = lst_vars.remove('geo')
+    st.write(lst_vars_selec)
+    st.write(type(lst_vars_selec))
     lst_vars_selec.remove('unit')
+    st.write(lst_vars_selec)
+    st.write(type(lst_vars_selec))
 
     for i in lst_vars_selec:
         values = [value for value in dic_df[i]['pars'].values()]
