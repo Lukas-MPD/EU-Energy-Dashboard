@@ -35,6 +35,8 @@ def get_eust_data(dataframe: str, lst_vars: list):
     # Melt the dataframe to long format
     df_melted = pd.melt(df, id_vars=lst_vars, var_name='date', value_name='value')
 
+    st.write(df_melted)
+    
     # Convert 'date' to datetime objects
     df_melted['date'] = pd.to_datetime(df_melted['date'])
 
@@ -230,7 +232,7 @@ with st.sidebar:
 
     toc, toc_names = get_toc()
 
-    st.write(toc_names)
+    #st.write(toc_names)
     
     # df_name = 'nrg_cb_pem'
 
@@ -265,38 +267,15 @@ with st.sidebar:
     #st.write(f'NEW: from: {from_date} to: {to_date}.')
     
     # st.write(countries)
-    
-    countries = [value for value in dic_df['geo']['pars'].values()]
-    
-    selected_countries = st.multiselect(
-        'Which countries would you like to view?',
-        countries,
-        countries
-    )
 
-    if not len(selected_countries):
-        st.warning("Select at least one country")
-
-    #st.write(selected_countries)
-    
     dict_filters = {}
-
-    selected_countries_code = [i for i in dic_df['geo']['pars'] if dic_df['geo']['pars'][i] in selected_countries]
-
-    dict_filters.update({'geo': selected_countries_code})
 
     #st.write(selected_countries_code)
     
     lst_vars = list(dic_df.keys())
-    st.write(lst_vars)
-    st.write(type(lst_vars))
     lst_vars_selec = lst_vars
     lst_vars_selec.remove('geo')
-    st.write(lst_vars_selec)
-    st.write(type(lst_vars_selec))
     lst_vars_selec.remove('unit')
-    st.write(lst_vars_selec)
-    st.write(type(lst_vars_selec))
 
     for i in lst_vars_selec:
         values = [value for value in dic_df[i]['pars'].values()]
@@ -311,7 +290,23 @@ with st.sidebar:
         if dic_df[i]['descr'] is not None:
             st.write(dic_df[i]['descr'])
 
+    countries = [value for value in dic_df['geo']['pars'].values()]
+    
+    selected_countries = st.multiselect(
+        'Which countries would you like to view?',
+        countries,
+        countries
+    )
 
+    if not len(selected_countries):
+        st.warning("Select at least one country")
+
+    #st.write(selected_countries)
+
+    selected_countries_code = [i for i in dic_df['geo']['pars'] if dic_df['geo']['pars'][i] in selected_countries]
+
+    dict_filters.update({'geo': selected_countries_code})
+    
     #st.write(picked_unit)
 
     df_eust = get_eust_data(df_name, lst_vars)
