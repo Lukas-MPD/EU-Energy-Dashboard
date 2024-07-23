@@ -310,7 +310,7 @@ with st.sidebar:
     # create dictionary
     filtered_descr_to_val = dict(zip(filtered_dic_units['descr'], filtered_dic_units['val']))
 
-    picked_unit_name = []
+    picked_unit_name = ['Total','Total','Total']
     
     #st.write(filtered_dic_units)
     for i in range(2):
