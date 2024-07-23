@@ -171,7 +171,7 @@ def get_toc():
         return response.content
 
     def filter_dict_by_codes(data, codes):
-        return {k: v for k, v in data.items() if v['code'] in codes}
+        return {k: v for k, v in data.items() if k in codes}
         
     # Get XML data
     xml_data = get_eurostat_toc_xml()
