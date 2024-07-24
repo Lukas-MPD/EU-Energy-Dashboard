@@ -337,7 +337,7 @@ with st.sidebar:
 
     dict_filters.update({'unit': unit})
 
-    st.write(dict_filters)
+    #st.write(dict_filters)
 
 
 
