@@ -346,12 +346,14 @@ with st.sidebar:
         df_filterd = df_filterd[df_filterd['unit'] == selection]
 
     
-    st.write(df_filterd)
+
     unit = df_filterd['unit'].unique()
 
-    st.write(f"unit type: {type(unit)}, unit: {unit}")
+    unit = list(unit)[0]
 
     dict_filters.update({'unit': unit})
+
+    st.write(dict_filters)
 
 
 
