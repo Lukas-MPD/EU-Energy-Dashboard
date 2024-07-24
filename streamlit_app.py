@@ -34,8 +34,6 @@ def get_eust_data(dataframe: str, lst_vars: list):
 
     # Melt the dataframe to long format
     df_melted = pd.melt(df, id_vars=lst_vars, var_name='date', value_name='value')
-    st.write(lst_vars)
-    st.write(df_melted)
     
     # Convert 'date' to datetime objects
     df_melted['date'] = pd.to_datetime(df_melted['date'])
@@ -316,22 +314,10 @@ with st.sidebar:
         (df_eust['date'] >= from_date)&
         (df_eust['date'] <= to_date)
     ]
-
-    st.write(df_filterd)
-
-    st.write(dict_filters)
     
     for key in dict_filters:
         temp_filt = dict_filters[key]
-        if type(temp_filt) == str:
-            temp_filt = [temp_filt,]
         df_filterd = df_filterd[df_filterd[key].isin(temp_filt)]
-        st.write(temp_filt)
-        st.write(key)
-        st.write(df_filterd)
-
-
-    st.write(df_filterd)
     
     units = df_filterd['unit'].unique()
 
@@ -345,11 +331,9 @@ with st.sidebar:
 
         df_filterd = df_filterd[df_filterd['unit'] == selection]
 
-    
-
     unit = df_filterd['unit'].unique()
 
-    unit = list(unit)[0]
+    unit = list(unit)
 
     dict_filters.update({'unit': unit})
 
