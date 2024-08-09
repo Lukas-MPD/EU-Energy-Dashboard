@@ -237,8 +237,6 @@ Browse energy data from the [eurostat Database](https://ec.europa.eu/eurostat/da
 ''
 ''
 
-# Create two columns
-col1, col2 = st.columns(2)
 
 with st.sidebar:
 
@@ -334,45 +332,10 @@ with st.sidebar:
     dict_filters.update({'unit': unit})
 
 with st.container():
-    
-    st.header("Map")
+    st.line_chart(df_filterd, x='date', y='value',color='geo')
 
-    nuts = get_nuts()
-
-    oneYear_df_eust = df_filterd[df_eust['date'] == to_date]
-
-    merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
-
-    # Ensure the GeoDataFrame contains only necessary columns
-    merged = merged[['CNTR_CODE', 'value', 'geometry']]
-
-    # Convert GeoDataFrame to GeoJSON
-    geojson_data = merged.to_json()
-
-    # Create a base map
-    m = folium.Map(location=[55.00, 13.0],
-                   # zoom_start=3,
-                   zoom_control=False,
-                   scrollWheelZoom=False,
-                   dragging=False)
-
-    folium.Choropleth(
-        geo_data=geojson_data,
-        data=merged,
-        columns=['CNTR_CODE', 'value'],
-        key_on='feature.properties.CNTR_CODE',
-        fill_color='YlOrRd',
-        fill_opacity=0.7,
-        line_opacity=0.2,
-        legend_name='Legend Name',
-        tooltip=folium.GeoJsonTooltip(fields=['CNTR_CODE'], aliases=['Country Code:'])
-    ).add_to(m)
-
-    bounds = [[34.5, -10.5], [71.0, 40.5]]  # [min_lat, min_lng], [max_lat, max_lng]
-    
-    m.fit_bounds(bounds)
-    
-    st_folium(m, width=700, height=500)
+# Create two columns
+col1, col2 = st.columns(2)
 
 # Add content to the first column
 with col1:
@@ -415,11 +378,11 @@ with col1:
     
     m.fit_bounds(bounds)
     
-    #st_folium(m)
+    st_folium(m, width=700, height=500)
 
 # Add content to the second column
 with col2:
-    st.header("Carts")
+    st.header("Radial-Bar-Cart")
 
     #min_date = df_eust['timestamp'].min()
     #max_date = df_eust['timestamp'].max()
