@@ -388,9 +388,9 @@ with mainpage:
             tooltip=folium.GeoJsonTooltip(fields=['CNTR_CODE'], aliases=['Country Code:'])
         ).add_to(m)
     
-        bounds = [[34.5, -10.5], [71.0, 35]]  # [min_lat, min_lng], [max_lat, max_lng]
+        #bounds = [[34.5, -10.5], [71.0, 35]]  # [min_lat, min_lng], [max_lat, max_lng]
         
-        m.fit_bounds(bounds)
+        #m.fit_bounds(bounds)
         
         st_folium(m, width=700, height=500)
     
