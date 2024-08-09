@@ -391,7 +391,7 @@ with mainpage:
         bounds = [[34.5, -10.5], [71.0, 35]]  # [min_lat, min_lng], [max_lat, max_lng]
         
         m.fit_bounds(bounds)
-
+        
         css = """
         <div style="width:100%;height:0;padding-bottom:100%;position:relative;">
           <div style="position:absolute;top:0;left:0;width:100%;height:100%;">
@@ -406,7 +406,7 @@ with mainpage:
         html = css.format(map=map_html)
         
         # Render the map with Streamlit
-        st.components.v1.html(html, height=0, scrolling=True)
+        st.components.v1.html(html, height=500, scrolling=False)
     
     # Add content to the second column
     with col2:
