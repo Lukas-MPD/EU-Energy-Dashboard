@@ -445,9 +445,9 @@ with col1:
     
     #folium_static(m)
 
-    bounds = [[33.0, -25.0], [67.0, 41.0]]
+    #bounds = [[33.0, -25.0], [67.0, 41.0]]
     
-    m.fit_bounds(bounds)
+    #m.fit_bounds(bounds)
     
     st_folium(m, width=600, height=700)
 
