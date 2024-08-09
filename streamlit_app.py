@@ -333,6 +333,47 @@ with st.sidebar:
 
     dict_filters.update({'unit': unit})
 
+with st.container():
+    
+    st.header("Map")
+
+    nuts = get_nuts()
+
+    oneYear_df_eust = df_filterd[df_eust['date'] == to_date]
+
+    merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
+
+    # Ensure the GeoDataFrame contains only necessary columns
+    merged = merged[['CNTR_CODE', 'value', 'geometry']]
+
+    # Convert GeoDataFrame to GeoJSON
+    geojson_data = merged.to_json()
+
+    # Create a base map
+    m = folium.Map(location=[55.00, 13.0],
+                   # zoom_start=3,
+                   zoom_control=False,
+                   scrollWheelZoom=False,
+                   dragging=False)
+
+    folium.Choropleth(
+        geo_data=geojson_data,
+        data=merged,
+        columns=['CNTR_CODE', 'value'],
+        key_on='feature.properties.CNTR_CODE',
+        fill_color='YlOrRd',
+        fill_opacity=0.7,
+        line_opacity=0.2,
+        legend_name='Legend Name',
+        tooltip=folium.GeoJsonTooltip(fields=['CNTR_CODE'], aliases=['Country Code:'])
+    ).add_to(m)
+
+    bounds = [[34.5, -10.5], [71.0, 40.5]]  # [min_lat, min_lng], [max_lat, max_lng]
+    
+    m.fit_bounds(bounds)
+    
+    st_folium(m)
+
 # Add content to the first column
 with col1:
     
