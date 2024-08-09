@@ -393,8 +393,8 @@ with mainpage:
         m.fit_bounds(bounds)
         
         css = """
-        <div style="width:100%;height:0;padding-bottom:100%;position:relative;">
-          <div style="position:relative;top:0;left:0;width:100%;height:100%;">
+        <div style="width:100%;height:0;padding-bottom:100%;position:absolute;">
+          <div style="position:absolute;top:0;left:0;width:100%;height:100%;">
             {map}
           </div>
         </div>
