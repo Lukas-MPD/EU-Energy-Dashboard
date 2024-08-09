@@ -353,7 +353,7 @@ with col1:
 
     # Create a base map
     m = folium.Map(location=[55.00, 13.0],
-                   zoom_start=3,
+                   # zoom_start=3,
                    zoom_control=False,
                    scrollWheelZoom=False,
                    dragging=False)
