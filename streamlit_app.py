@@ -406,7 +406,7 @@ with mainpage:
         html = css.format(map=map_html)
         
         # Render the map with Streamlit
-        st.components.v1.html(html, height=0, scrolling=False)
+        st.components.v1.html(html, scrolling=False)
     
     # Add content to the second column
     with col2:
