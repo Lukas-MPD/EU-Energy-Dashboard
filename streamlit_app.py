@@ -196,6 +196,21 @@ def get_toc():
     codes = ['nrg_chdd_m', 'nrg_cb_sffm', 'nrg_cb_oilm', 'nrg_cb_cosm', 'nrg_cb_gasm', 'nrg_cb_em', 'nrg_cb_eim',
 'nrg_cb_pem', 'nrg_t_m', 'nrg_ti_m', 'nrg_ti_oilm', 'nrg_ti_gasm', 'nrg_ti_coifpm', 'nrg_te_m', 'nrg_te_oilm',
 'nrg_te_gasm', 'nrg_stk_m', 'nrg_stk_oilm', 'nrg_stk_oom', 'nrg_stk_oam', 'nrg_stk_oem', 'nrg_stk_gasm']
+
+    """
+    Not working:
+     276 │   lst_vars_selec.remove('unit') 'unit' not in list
+    Crude oil supply - monthly data
+    Crude oil imports by field of produ
+
+    App crashed:
+    get_eust_df()
+    Crude oil imports by field of produ
+
+
+    maybe:
+    Exports of oil and petroleum pro
+    """
     
     datasets_dict = filter_dict_by_codes(datasets_dict, codes)
     
@@ -430,6 +445,13 @@ with col1:
     
     #folium_static(m)
 
+    bounds = [-25.0,
+              33.0,
+              41.0,
+              67.0]
+    
+    m.fit_bounds(bounds)
+    
     st_folium(m)
 
 # Add content to the second column
