@@ -18,8 +18,19 @@ st.set_page_config(
     page_title='EU energy dashboard',
     page_icon=':electric_plug:', # This is an emoji shortcode. Could be a URL too.
     layout="wide",
+    initial_sidebar_state="collapsed"
 )
 
+st.markdown(
+    """
+<style>
+    [data-testid="collapsedControl"] {
+        display: none
+    }
+</style>
+""",
+    unsafe_allow_html=True,
+)
 # -----------------------------------------------------------------------------
 # Declare some useful functions.
 
@@ -237,8 +248,9 @@ Browse energy data from the [eurostat Database](https://ec.europa.eu/eurostat/da
 ''
 ''
 
+sidebar, mainpage = st.columns([1,4])
 
-with st.sidebar:
+with sidebar:
 
     toc, toc_names = get_toc()
 
@@ -331,82 +343,84 @@ with st.sidebar:
 
     dict_filters.update({'unit': unit})
 
-with st.container():
-    st.line_chart(df_filterd, x='date', y='value',color='geo')
-
-# Create two columns
-col1, col2 = st.columns(2)
-
-# Add content to the first column
-with col1:
+with mainpage:
     
+    with st.container():
+        st.line_chart(df_filterd, x='date', y='value',color='geo')
     
-    st.header("Map")
-
-    nuts = get_nuts()
-
-    oneYear_df_eust = df_filterd[df_eust['date'] == to_date]
-
-    merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
-
-    # Ensure the GeoDataFrame contains only necessary columns
-    merged = merged[['CNTR_CODE', 'value', 'geometry']]
-
-    # Convert GeoDataFrame to GeoJSON
-    geojson_data = merged.to_json()
-
-    # Create a base map
-    m = folium.Map(location=[55.00, 13.0],
-                   # zoom_start=3,
-                   zoom_control=False,
-                   scrollWheelZoom=False,
-                   dragging=False)
-
-    folium.Choropleth(
-        geo_data=geojson_data,
-        data=merged,
-        columns=['CNTR_CODE', 'value'],
-        key_on='feature.properties.CNTR_CODE',
-        fill_color='YlOrRd',
-        fill_opacity=0.7,
-        line_opacity=0.2,
-        legend_name='Legend Name',
-        tooltip=folium.GeoJsonTooltip(fields=['CNTR_CODE'], aliases=['Country Code:'])
-    ).add_to(m)
-
-    bounds = [[34.5, -10.5], [71.0, 35]]  # [min_lat, min_lng], [max_lat, max_lng]
+    # Create two columns
+    col1, col2 = st.columns(2)
     
-    m.fit_bounds(bounds)
-    
-    st_folium(m, width=700, height=500)
-
-# Add content to the second column
-with col2:
-    st.header("Radial-Bar-Cart")
-
-    #min_date = df_eust['timestamp'].min()
-    #max_date = df_eust['timestamp'].max()
-
-    #st.write(f'From date: {from_date} to date: {to_date}')
-    #st.write(df_eust)
-
-    
-    
-    # Filter the data
-
-    #st.write(filtered_df_eust)
-    # Display the selected dates
-    #st.write(f'From date: {from_date} to date: {to_date}')
-
-    st.line_chart(df_filterd, x='date', y='value',color='geo')
-
-
+    # Add content to the first column
+    with col1:
         
-    # center on Liberty Bell, add marker
-    #m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
-    #folium.Marker(
-    #    [39.949610, -75.150282], popup="Liberty Bell", tooltip="Liberty Bell"
-    #).add_to(m)
+        
+        st.header("Map")
     
-    # call to render Folium map in Streamlit
-    #st_data = st_folium(m, width=725)
+        nuts = get_nuts()
+    
+        oneYear_df_eust = df_filterd[df_eust['date'] == to_date]
+    
+        merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
+    
+        # Ensure the GeoDataFrame contains only necessary columns
+        merged = merged[['CNTR_CODE', 'value', 'geometry']]
+    
+        # Convert GeoDataFrame to GeoJSON
+        geojson_data = merged.to_json()
+    
+        # Create a base map
+        m = folium.Map(location=[55.00, 13.0],
+                       # zoom_start=3,
+                       zoom_control=False,
+                       scrollWheelZoom=False,
+                       dragging=False)
+    
+        folium.Choropleth(
+            geo_data=geojson_data,
+            data=merged,
+            columns=['CNTR_CODE', 'value'],
+            key_on='feature.properties.CNTR_CODE',
+            fill_color='YlOrRd',
+            fill_opacity=0.7,
+            line_opacity=0.2,
+            legend_name='Legend Name',
+            tooltip=folium.GeoJsonTooltip(fields=['CNTR_CODE'], aliases=['Country Code:'])
+        ).add_to(m)
+    
+        bounds = [[34.5, -10.5], [71.0, 35]]  # [min_lat, min_lng], [max_lat, max_lng]
+        
+        m.fit_bounds(bounds)
+        
+        st_folium(m, width=700, height=500)
+    
+    # Add content to the second column
+    with col2:
+        st.header("Radial-Bar-Cart")
+    
+        #min_date = df_eust['timestamp'].min()
+        #max_date = df_eust['timestamp'].max()
+    
+        #st.write(f'From date: {from_date} to date: {to_date}')
+        #st.write(df_eust)
+    
+        
+        
+        # Filter the data
+    
+        #st.write(filtered_df_eust)
+        # Display the selected dates
+        #st.write(f'From date: {from_date} to date: {to_date}')
+    
+        st.line_chart(df_filterd, x='date', y='value',color='geo')
+    
+    
+            
+        # center on Liberty Bell, add marker
+        #m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
+        #folium.Marker(
+        #    [39.949610, -75.150282], popup="Liberty Bell", tooltip="Liberty Bell"
+        #).add_to(m)
+        
+        # call to render Folium map in Streamlit
+        #st_data = st_folium(m, width=725)
