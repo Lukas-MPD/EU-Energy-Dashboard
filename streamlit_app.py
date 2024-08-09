@@ -70,6 +70,7 @@ def dic_countries(df_name):
 
     return dic_countries, country_to_code
 
+@st.cache_data
 def get_dic_df(df_name):
    
     dic_df = eust.get_dic(df_name, frmt='dict')
