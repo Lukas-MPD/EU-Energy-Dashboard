@@ -415,7 +415,7 @@ with col1:
     
     m.fit_bounds(bounds)
     
-    st_folium(m)
+    #st_folium(m)
 
 # Add content to the second column
 with col2:
