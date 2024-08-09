@@ -445,10 +445,7 @@ with col1:
     
     #folium_static(m)
 
-    bounds = [-25.0,
-              33.0,
-              41.0,
-              67.0]
+    bounds = [[33.0, -25.0], [67.0, 41.0]]
     
     m.fit_bounds(bounds)
     
