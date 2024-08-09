@@ -240,29 +240,19 @@ Browse energy data from the [eurostat Database](https://ec.europa.eu/eurostat/da
 # Create two columns
 col1, col2 = st.columns(2)
 
-
-
 with st.sidebar:
 
     toc, toc_names = get_toc()
-
-    #st.write(toc_names)
-    
-    # df_name = 'nrg_cb_pem'
 
     df_name_long = st.selectbox(
         'Which dataset would you like to view?',
         toc_names,
         index = toc_names.index('Net electricity generation by type of fuel - monthly data')
     )
-
-    # st.write(f"{df_name_long} is beeing displayed")
     
     df_name = [i for i in toc if toc[i]['title']==df_name_long][0]
 
     dic_df = get_dic_df(df_name)
-
-    # st.write(f"{df_name} is the code for the dataset")
     
     data_start = datetime.strptime(toc[df_name]['dataStart'], '%Y-%m').date()
     data_end = datetime.strptime(toc[df_name]['dataEnd'], '%Y-%m').date()
@@ -274,17 +264,11 @@ with st.sidebar:
         value=(data_start, data_end),
         format="YYYY-MM"
     )
-    #st.write(f'from: {from_date} to: {to_date}.')
+
     from_date = from_date.replace(day=1)
     to_date = to_date.replace(day=1)
 
-    #st.write(f'NEW: from: {from_date} to: {to_date}.')
-    
-    # st.write(countries)
-
     dict_filters = {}
-
-    #st.write(selected_countries_code)
     
     lst_vars_selec = list(dic_df.keys())
     lst_vars_selec.remove('geo')
@@ -314,13 +298,9 @@ with st.sidebar:
     if not len(selected_countries):
         st.warning("Select at least one country")
 
-    #st.write(selected_countries)
-
     selected_countries_code = [i for i in dic_df['geo']['pars'] if dic_df['geo']['pars'][i] in selected_countries]
     
     dict_filters.update({'geo': selected_countries_code})
-    
-    #st.write(picked_unit)
 
     lst_vars = list(dic_df.keys())
     
@@ -353,84 +333,31 @@ with st.sidebar:
 
     dict_filters.update({'unit': unit})
 
-    #st.write(dict_filters)
-
-
-
 # Add content to the first column
 with col1:
     
     
     st.header("Map")
 
-
-    #st.write(df_eust)
-    #st.write(dic_eust)
-    #st.write(filtered_df_eust)
-    ## Sample data
-    #data = {'lat': [37.76, 34.05], 'lon': [-122.4, -118.25]}
-    #df = pd.DataFrame(data)
-    
-    # Display the map
-    #st.map(df)
-
-    # Define a PyDeck layer
-    #layer = pdk.Layer(
-    #    'HexagonLayer',
-    #    df,
-    #    get_position='[lon, lat]',
-    #    auto_highlight=True,
-    #    elevation_scale=50,
-    #    pickable=True,
-    #    elevation_range=[0, 3000],
-    #    extruded=True,
-    #    coverage=1
-    #)
-    
-    # Set the viewport location
-    #view_state = pdk.ViewState(
-    #    longitude=-122.4,
-    #    latitude=37.76,
-    #    zoom=6,
-    #    pitch=50
-    #)
-    
-    # Render the map with PyDeck
-    #st.pydeck_chart(pdk.Deck(
-    #    layers=[layer],
-    #    initial_view_state=view_state
-    #))
-
     nuts = get_nuts()
 
     oneYear_df_eust = df_filterd[df_eust['date'] == to_date]
 
-    #st.write(oneYear_df_eust)
     merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
-    #st.write(merged)
+
     # Ensure the GeoDataFrame contains only necessary columns
     merged = merged[['CNTR_CODE', 'value', 'geometry']]
-    #st.write(merged)
+
     # Convert GeoDataFrame to GeoJSON
     geojson_data = merged.to_json()
-    #st.write(geojson_data)
+
     # Create a base map
     m = folium.Map(location=[55.00, 13.0],
                    zoom_start=3,
                    zoom_control=False,
                    scrollWheelZoom=False,
                    dragging=False)
-    
-    # Add a choropleth layer to the map
-    
-    #folium.GeoJson(
-    #    geo_data=geojson_data,
-    #    name='NUTS Level 0',
-    #    tooltip=folium.GeoJsonTooltip(fields=['CNTR_CODE'], aliases=['Country Code:'])
-    #).add_to(m)
-    
-    
-    
+
     folium.Choropleth(
         geo_data=geojson_data,
         data=merged,
@@ -442,12 +369,10 @@ with col1:
         legend_name='Legend Name',
         tooltip=folium.GeoJsonTooltip(fields=['CNTR_CODE'], aliases=['Country Code:'])
     ).add_to(m)
-    
-    #folium_static(m)
 
-    #bounds = [[33.0, -25.0], [67.0, 41.0]]
+    bounds = [[35.0, -20.0], [60.0, 35.0]]
     
-    #m.fit_bounds(bounds)
+    m.fit_bounds(bounds)
     
     st_folium(m, width=600, height=700)
 
