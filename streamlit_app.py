@@ -372,7 +372,7 @@ with st.container():
     
     m.fit_bounds(bounds)
     
-    st_folium(m)
+    st_folium(m, width=700, height=500)
 
 # Add content to the first column
 with col1:
