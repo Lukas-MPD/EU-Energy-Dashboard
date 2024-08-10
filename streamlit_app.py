@@ -429,8 +429,8 @@ with mainpage:
         #st.write(f'From date: {from_date} to date: {to_date}')
     
         # st.line_chart(df_filterd, x='date', y='value',color='geo')
-
-        df_filterd['month'] = df_filterd['date'].dt.month
+        df_filterd['datetime'] = pd.to_datetime(df_filterd['date'])
+        df_filterd['month'] = df_filterd['datetime'].dt.month
 
         # Group by month and calculate the mean of the 'value' column
         monthly_mean = df_filterd.groupby('geo', 'month')[unit].mean().reset_index()
