@@ -447,7 +447,7 @@ with mainpage:
         fig_bar_polar = px.line_polar(monthly_mean,
                                      r = 'value',
                                      theta = 'month',
-                                     color = 'geo'
+                                     color = 'geo', line_close=True
                                     )
 
         st.plotly_chart(fig_bar_polar)
