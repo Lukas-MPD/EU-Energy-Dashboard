@@ -455,13 +455,15 @@ with mainpage:
         
         st.write(monthly_mean)
 
-        fig_bar_polar = px.line_polar(monthly_mean,
-                                     r = 'value', log_r = True, range_r = [0, monthly_mean['value'].max()],
+        line_r_range = [0, monthly_mean['value'].max()]
+        
+        fig_line_polar = px.line_polar(monthly_mean,
+                                     r = 'value', log_r = True, range_r = line_r_range,
                                      theta = 'month_name',
                                      color = 'geo', line_close=True, template="plotly_dark", 
                                     )
 
-        st.plotly_chart(fig_bar_polar)
+        st.plotly_chart(fig_line_polar)
             
         # center on Liberty Bell, add marker
         #m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
