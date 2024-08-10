@@ -440,16 +440,13 @@ with mainpage:
         # Group by month and calculate the mean of the 'value' column
         monthly_mean = monthly_mean.groupby(['geo', 'month'])['value'].mean().reset_index()
 
-        monthly_mean = monthly_mean.sort_values(by='value', ascending=True)
-
         st.write(monthly_mean)
 
         fig_bar_polar = px.bar_polar(monthly_mean,
                                      r = 'value',
                                      theta = 'month',
                                      color = 'geo',
-                                     #category_orders={'geo': monthly_mean['geo'].tolist()},
-                                     range_theta = [1,12]
+                                     barmode = 'group'
                                     )
 
         st.plotly_chart(fig_bar_polar)
