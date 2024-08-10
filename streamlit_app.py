@@ -456,6 +456,8 @@ with mainpage:
         st.write(monthly_mean)
 
         line_r_range = [0, monthly_mean['value'].max()]
+
+        st.write(line_r_range)
         
         fig_line_polar = px.line_polar(monthly_mean,
                                      r = 'value', log_r = True, range_r = line_r_range,
