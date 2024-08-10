@@ -12,6 +12,8 @@ from streamlit_folium import st_folium
 import streamlit.components.v1 as components
 import xml.etree.ElementTree as ET
 import requests
+import plotly.express as px
+import numpy as np
 
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
@@ -426,9 +428,16 @@ with mainpage:
         # Display the selected dates
         #st.write(f'From date: {from_date} to date: {to_date}')
     
-        st.line_chart(df_filterd, x='date', y='value',color='geo')
-    
-    
+        # st.line_chart(df_filterd, x='date', y='value',color='geo')
+
+        df_filterd['month'] = df_filterd['date'].dt.month
+
+        # Group by month and calculate the mean of the 'value' column
+        monthly_mean = df_filterd.groupby('geo', 'month')[unit].mean().reset_index()
+
+        fig_bar_polar = px.bar_polar(monthly_mean, r = unit, theta = 'month', color = 'geo')
+
+        st.plotly_chart(fig_bar_polar)
             
         # center on Liberty Bell, add marker
         #m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
