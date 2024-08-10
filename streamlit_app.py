@@ -448,7 +448,7 @@ with mainpage:
                                      r = 'value',
                                      theta = 'month',
                                      color = 'geo',
-                                     barmode = 'overlay'
+                                     barmode = 'group'
                                     )
 
         st.plotly_chart(fig_bar_polar)
