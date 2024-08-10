@@ -444,20 +444,20 @@ with mainpage:
         
         monthly_mean['datetime'] = pd.to_datetime(monthly_mean['date'])
         
-        # monthly_mean['month'] = monthly_mean['datetime'].dt.month
+        monthly_mean['month'] = monthly_mean['datetime'].dt.month
 
-        df_filterd['month'] = df_filterd['datetime'].dt.month_name()
+        df_filterd['month_name'] = df_filterd['datetime'].dt.month_name()
 
         st.write(monthly_mean)
         
         # Group by month and calculate the mean of the 'value' column
-        monthly_mean = monthly_mean.groupby(['geo', 'month'])['value'].mean().reset_index()
+        monthly_mean = monthly_mean.groupby(['geo', 'month', 'month_name'])['value'].mean().reset_index()
         
         st.write(monthly_mean)
 
         fig_bar_polar = px.line_polar(monthly_mean,
                                      r = 'value', log_r = True,
-                                     theta = 'month',
+                                     theta = 'month_name',
                                      color = 'geo', line_close=True, template="plotly_dark",
                                     )
 
