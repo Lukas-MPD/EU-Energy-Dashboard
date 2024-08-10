@@ -433,7 +433,7 @@ with mainpage:
         
         monthly_mean['datetime'] = pd.to_datetime(monthly_mean['date'])
         
-        monthly_mean['month'] = monthly_mean['datetime'].dt.month
+        monthly_mean['month'] = monthly_mean['datetime'].dt.month * 30 - 15
 
         st.write(monthly_mean)
         
