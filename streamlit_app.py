@@ -444,11 +444,10 @@ with mainpage:
         
         st.write(monthly_mean)
 
-        fig_bar_polar = px.bar_polar(monthly_mean,
+        fig_bar_polar = px.line_polar(monthly_mean,
                                      r = 'value',
                                      theta = 'month',
-                                     color = 'geo',
-                                     barmode = 'group'
+                                     color = 'geo'
                                     )
 
         st.plotly_chart(fig_bar_polar)
