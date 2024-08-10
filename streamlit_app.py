@@ -438,7 +438,7 @@ with mainpage:
         st.write(monthly_mean)
         
         # Group by month and calculate the mean of the 'value' column
-        monthly_mean = monthly_mean.groupby('geo', 'month')['value'].mean().reset_index()
+        monthly_mean = monthly_mean.groupby('geo', 'month') #['value'].mean().reset_index()
 
         st.write(monthly_mean)
 
