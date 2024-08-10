@@ -456,7 +456,7 @@ with mainpage:
         st.write(monthly_mean)
 
         fig_bar_polar = px.line_polar(monthly_mean,
-                                     r = 'value',
+                                     r = 'value', log_r = True,
                                      theta = 'month',
                                      color = 'geo', line_close=True, template="plotly_dark",
                                     )
