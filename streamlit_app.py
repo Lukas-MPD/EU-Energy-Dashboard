@@ -433,7 +433,7 @@ with mainpage:
         
         monthly_mean['datetime'] = pd.to_datetime(monthly_mean['date'])
         
-        monthly_mean['month'] = monthly_mean['datetime'].dt.month * 30 - 15
+        monthly_mean['month'] = monthly_mean['datetime'].dt.month
 
         st.write(monthly_mean)
         
@@ -448,7 +448,8 @@ with mainpage:
                                      r = 'value',
                                      theta = 'month',
                                      color = 'geo',
-                                     category_orders={'geo': monthly_mean['geo'].tolist()}
+                                     #category_orders={'geo': monthly_mean['geo'].tolist()},
+                                     range_theta = [1,12]
                                     )
 
         st.plotly_chart(fig_bar_polar)
