@@ -429,6 +429,17 @@ with mainpage:
         #st.write(f'From date: {from_date} to date: {to_date}')
     
         # st.line_chart(df_filterd, x='date', y='value',color='geo')
+
+        df_wind = px.data.wind()
+
+        st.write(df_wind)
+        
+        fig_wind = px.line_polar(df_wind, r="frequency", theta="direction", color="strength", line_close=True,
+                            color_discrete_sequence=px.colors.sequential.Plasma_r,
+                            template="plotly_dark",)
+
+        st.plotly_chart(fig_wind)
+        
         monthly_mean = df_filterd
         
         monthly_mean['datetime'] = pd.to_datetime(monthly_mean['date'])
@@ -445,7 +456,7 @@ with mainpage:
         fig_bar_polar = px.line_polar(monthly_mean,
                                      r = 'value',
                                      theta = 'month',
-                                     color = 'geo', line_close=True
+                                     color = 'geo', line_close=True, template="plotly_dark",
                                     )
 
         st.plotly_chart(fig_bar_polar)
