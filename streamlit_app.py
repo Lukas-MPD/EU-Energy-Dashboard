@@ -438,13 +438,13 @@ with mainpage:
         st.write(monthly_mean)
         
         # Group by month and calculate the mean of the 'value' column
-        monthly_mean = monthly_mean.groupby('geo', 'month') #['value'].mean().reset_index()
+        monthly_mean2 = monthly_mean.groupby('geo', 'month') #['value'].mean().reset_index()
 
-        st.write(monthly_mean)
+        st.write(monthly_mean2)
 
-        fig_bar_polar = px.bar_polar(monthly_mean, r = 'value', theta = 'month', color = 'geo')
+        # fig_bar_polar = px.bar_polar(monthly_mean, r = 'value', theta = 'month', color = 'geo')
 
-        st.plotly_chart(fig_bar_polar)
+        # st.plotly_chart(fig_bar_polar)
             
         # center on Liberty Bell, add marker
         #m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
