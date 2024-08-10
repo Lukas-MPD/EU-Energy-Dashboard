@@ -440,7 +440,7 @@ with mainpage:
         # Group by month and calculate the mean of the 'value' column
         monthly_mean = monthly_mean.groupby(['geo', 'month'])['value'].mean().reset_index()
 
-        monthly_mean = monthly_mean.sort_values(by='value', ascending=False)
+        monthly_mean = monthly_mean.sort_values(by='value', ascending=True)
 
         st.write(monthly_mean)
 
