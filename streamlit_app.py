@@ -455,7 +455,7 @@ with mainpage:
         
         st.write(monthly_mean)
 
-        line_r_range = [0.0, monthly_mean['value'].max()]
+        line_r_range = [1.0, monthly_mean['value'].max()]
 
         st.write(line_r_range)
         
