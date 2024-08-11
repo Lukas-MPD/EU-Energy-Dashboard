@@ -378,9 +378,9 @@ with sidebar:
     unit = list(unit)
 
     dict_filters.update({'unit': unit})
-
+    
     if tot_or_cap == 'Per Capita':
-        df_filterd = per_capita(df_filterd)
+        df_filterd2 = per_capita(df_filterd)
 
 with mainpage:
     
@@ -395,7 +395,7 @@ with mainpage:
         
         
         st.header("Map")
-    
+        st.write(df_filterd)
         nuts = get_nuts()
     
         oneYear_df_eust = df_filterd[df_eust['date'] == to_date]
@@ -450,14 +450,12 @@ with mainpage:
     # Add content to the second column
     with col2:
         st.header("Radial-Bar-Cart")
-            
+        st.write(df_filterd2)
         monthly_mean = df_filterd
         
         monthly_mean['month'] = monthly_mean['datetime'].dt.month
 
         df_filterd['month_name'] = df_filterd['datetime'].dt.month_name()
-
-        st.write(monthly_mean)
         
         # Group by month and calculate the mean of the 'value' column
         monthly_mean = monthly_mean.groupby(['geo', 'month', 'month_name'])['value'].mean().reset_index()
