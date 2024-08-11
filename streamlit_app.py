@@ -49,13 +49,42 @@ def get_eust_data(dataframe: str, lst_vars: list):
     df_melted = pd.melt(df, id_vars=lst_vars, var_name='date', value_name='value')
     
     # Convert 'date' to datetime objects
-    df_melted['date'] = pd.to_datetime(df_melted['date'])
+    df_melted['datetime'] = pd.to_datetime(df_melted['date'])
 
     # Extract date part (datetime.date objects)
-    df_melted['date'] = df_melted['date'].dt.date
+    df_melted['date'] = df_melted['datetime'].dt.date
     
     # Display the transformed dataframe
     return df_melted
+
+@st.cache_data
+def per_capita(df):
+    pop = eust.get_data_df('demo_gind', filter_pars={'indic_de': 'AVG'})
+    pop = pop.drop(columns=['freq', 'indic_de'])
+    pop.rename(columns={'geo\\TIME_PERIOD': 'geo'}, inplace=True)
+
+    for ind in df.index:
+        year = df['datetime'][ind].dt.year
+        geo = df['geo'][ind]
+        pop_filterd = pop[(pop['geo'] == geo)]
+        if pop_filterd[year][0]:
+            pop_val = pop_filterd[year][0]
+        else:
+            for i in range(5):
+                year_temp = year - 1
+                if year_temp in pop.columns:
+                    if pop_filterd[year_temp][0]:
+                        pop_val = pop_filterd[year_temp][0]
+                        break
+                if i == 4:
+                    pop_val = None
+
+            
+        if pop_val:
+            df['value'][ind] = df['value'][ind]/pop_val
+        else:
+            df['value'][ind] = None
+    return df
 
 @st.cache_data
 def get_nuts():
@@ -210,20 +239,20 @@ def get_toc():
 'nrg_cb_pem', 'nrg_t_m', 'nrg_ti_m', 'nrg_ti_oilm', 'nrg_ti_gasm', 'nrg_ti_coifpm', 'nrg_te_m', 'nrg_te_oilm',
 'nrg_te_gasm', 'nrg_stk_m', 'nrg_stk_oilm', 'nrg_stk_oom', 'nrg_stk_oam', 'nrg_stk_oem', 'nrg_stk_gasm']
 
-    """
-    Not working:
-     276 │   lst_vars_selec.remove('unit') 'unit' not in list
-    Crude oil supply - monthly data
-    Crude oil imports by field of produ
+    
+    #Not working:
+    # 276 │   lst_vars_selec.remove('unit') 'unit' not in list
+    #Crude oil supply - monthly data
+    #Crude oil imports by field of produ
 
-    App crashed:
-    get_eust_df()
-    Crude oil imports by field of produ
+    #App crashed:
+    #get_eust_df()
+    #Crude oil imports by field of produ
 
 
-    maybe:
-    Exports of oil and petroleum pro
-    """
+    #maybe:
+    #Exports of oil and petroleum pro
+    
     
     datasets_dict = filter_dict_by_codes(datasets_dict, codes)
     
@@ -254,6 +283,10 @@ sidebar, mainpage = st.columns([1,4])
 
 with sidebar:
 
+    tot_or_cap = st.radio(
+        "Display data in:",
+        ['Total', 'Per Capita'])
+    
     toc, toc_names = get_toc()
 
     df_name_long = st.selectbox(
@@ -345,6 +378,9 @@ with sidebar:
 
     dict_filters.update({'unit': unit})
 
+    if tot_or_cap == 'Per Capita':
+        df_filterd = per_capita(df_filterd)
+
 with mainpage:
     
     with st.container():
@@ -431,8 +467,6 @@ with mainpage:
         # st.line_chart(df_filterd, x='date', y='value',color='geo')
         
         monthly_mean = df_filterd
-        
-        monthly_mean['datetime'] = pd.to_datetime(monthly_mean['date'])
         
         monthly_mean['month'] = monthly_mean['datetime'].dt.month
 
