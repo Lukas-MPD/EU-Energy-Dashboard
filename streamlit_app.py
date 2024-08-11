@@ -415,7 +415,7 @@ with mainpage:
 
         fig = px.choropleth(
             merged,
-            geojson=merged.geo.__geo_interface__,
+            geojson=merged.geometry.__geo_interface__,
             locations=merged.index,
             color='value',
             hover_name='CNTR_CODE',
