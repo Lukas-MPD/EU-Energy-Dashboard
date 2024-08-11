@@ -389,7 +389,10 @@ with mainpage:
 
     
     with st.container():
-        st.line_chart(df_filtered, x='date', y='value',color='geo', color_discrete_map=color_map)
+
+        fig_line_chart = px.line(df_filtered, x='date', y='value', color='geo', color_discrete_map=color_map)
+        st.plotly_chart(fig_line_chart)
+        # st.line_chart(df_filtered, x='date', y='value',color='geo')
     
     # Create two columns
     col1, col2 = st.columns(2)
