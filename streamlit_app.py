@@ -380,7 +380,7 @@ with sidebar:
     dict_filters.update({'unit': unit})
     
     if tot_or_cap == 'Per Capita':
-        df_filterd2 = per_capita(df_filterd)
+        df_filterd = per_capita(df_filterd)
 
 with mainpage:
     
@@ -450,8 +450,8 @@ with mainpage:
     # Add content to the second column
     with col2:
         st.header("Radial-Bar-Cart")
-        if tot_or_cap == 'Per Capita':
-            st.write(df_filterd2)
+        #if tot_or_cap == 'Per Capita':
+            #st.write(df_filterd2)
         monthly_mean = df_filterd
         
         monthly_mean['month'] = monthly_mean['datetime'].dt.month
