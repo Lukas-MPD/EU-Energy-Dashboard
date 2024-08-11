@@ -401,7 +401,7 @@ with mainpage:
     with col1:
         
         
-        st.header("Map")
+        #st.header("Map")
         #st.write(df_filtered)
         nuts = get_nuts()
     
@@ -411,7 +411,35 @@ with mainpage:
     
         # Ensure the GeoDataFrame contains only necessary columns
         merged = merged[['CNTR_CODE', 'value', 'geometry']]
-    
+
+
+        fig = px.choropleth(
+            merged,
+            geojson=merged.geo.__geo_interface__,
+            locations=merged.index,
+            color='value',
+            hover_name='CNTR_CODE',
+            hover_data=['value'],
+            color_continuous_scale='YlOrRd',
+            labels={'value': 'Legend Name'},
+        )
+        
+        # Update layout for dark theme and disable scrolling
+        fig.update_geos(
+            fitbounds="locations",
+            visible=False,
+            projection_type="mercator"
+        )
+        fig.update_layout(
+            geo=dict(bgcolor= 'rgba(0,0,0,0)'),
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+            margin={"r":0,"t":0,"l":0,"b":0},
+            dragmode=False
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
+        
         # Convert GeoDataFrame to GeoJSON
         geojson_data = merged.to_json()
     
