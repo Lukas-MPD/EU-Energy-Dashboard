@@ -460,7 +460,7 @@ with mainpage:
         # Group by month and calculate the mean of the 'value' column
         monthly_mean = monthly_mean.groupby(['geo', 'month', 'month_name'])['value'].mean().reset_index()
 
-        line_r_range = [1.0, monthly_mean['value'].max()]
+        line_r_range = [0.000000000000001, monthly_mean['value'].max()]
         
         fig_line_polar = px.line_polar(monthly_mean,
                                      r = 'value', log_r = False, range_r = line_r_range,
