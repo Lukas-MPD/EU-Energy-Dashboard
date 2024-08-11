@@ -352,16 +352,16 @@ with sidebar:
     
     df_eust = get_eust_data(df_name, lst_vars)
 
-    df_filterd = df_eust[
+    df_filtered = df_eust[
         (df_eust['date'] >= from_date)&
         (df_eust['date'] <= to_date)
     ]
     
     for key in dict_filters:
         temp_filt = dict_filters[key]
-        df_filterd = df_filterd[df_filterd[key].isin(temp_filt)]
+        df_filtered = df_filtered[df_filtered[key].isin(temp_filt)]
     
-    units = df_filterd['unit'].unique()
+    units = df_filtered['unit'].unique()
 
     units = units.tolist()
     
@@ -371,21 +371,25 @@ with sidebar:
             units
         )
 
-        df_filterd = df_filterd[df_filterd['unit'] == selection]
+        df_filtered = df_filtered[df_filtered['unit'] == selection]
 
-    unit = df_filterd['unit'].unique()
+    unit = df_filtered['unit'].unique()
 
     unit = list(unit)
 
     dict_filters.update({'unit': unit})
     
     if tot_or_cap == 'Per Capita':
-        df_filterd = per_capita(df_filterd)
+        df_filtered = per_capita(df_filtered)
 
 with mainpage:
+
+    unique_geos = df_filtered['geo'].unique()
+    color_map = {geo: px.colors.qualitative.Plotly[i % len(px.colors.qualitative.Plotly)] for i, geo in enumerate(unique_geos)}
+
     
     with st.container():
-        st.line_chart(df_filterd, x='date', y='value',color='geo')
+        st.line_chart(df_filtered, x='date', y='value',color='geo', color_discrete_map=color_map)
     
     # Create two columns
     col1, col2 = st.columns(2)
@@ -395,10 +399,10 @@ with mainpage:
         
         
         st.header("Map")
-        st.write(df_filterd)
+        #st.write(df_filtered)
         nuts = get_nuts()
     
-        oneYear_df_eust = df_filterd[df_eust['date'] == to_date]
+        oneYear_df_eust = df_filtered[df_eust['date'] == to_date]
     
         merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
     
@@ -451,12 +455,12 @@ with mainpage:
     with col2:
         st.header("Radial-Bar-Cart")
         #if tot_or_cap == 'Per Capita':
-            #st.write(df_filterd2)
-        monthly_mean = df_filterd
+            #st.write(df_filtered2)
+        monthly_mean = df_filtered
         
         monthly_mean['month'] = monthly_mean['datetime'].dt.month
 
-        df_filterd['month_name'] = df_filterd['datetime'].dt.month_name()
+        df_filtered['month_name'] = df_filtered['datetime'].dt.month_name()
         
         # Group by month and calculate the mean of the 'value' column
         monthly_mean = monthly_mean.groupby(['geo', 'month', 'month_name'])['value'].mean().reset_index()
@@ -466,7 +470,7 @@ with mainpage:
         fig_line_polar = px.line_polar(monthly_mean,
                                      r = 'value', log_r = False, range_r = line_r_range,
                                      theta = 'month_name',
-                                     color = 'geo', line_close=True, template="plotly_dark", 
+                                     color = 'geo', color_discrete_map=color_map, line_close=True, template="plotly_dark", 
                                     )
 
         st.plotly_chart(fig_line_polar)
@@ -485,7 +489,7 @@ with mainpage:
         # Display the selected dates
         #st.write(f'From date: {from_date} to date: {to_date}')
     
-        # st.line_chart(df_filterd, x='date', y='value',color='geo')
+        # st.line_chart(df_filtered, x='date', y='value',color='geo')
         # center on Liberty Bell, add marker
         #m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
         #folium.Marker(
