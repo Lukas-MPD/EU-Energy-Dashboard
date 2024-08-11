@@ -420,7 +420,7 @@ with mainpage:
             color='value',
             hover_name='CNTR_CODE',
             hover_data=['value'],
-            color_continuous_scale='YlOrRd',
+            color_continuous_scale='Viridis',
             labels={'value': 'Legend Name'},
         )
         
@@ -431,11 +431,20 @@ with mainpage:
             projection_type="mercator"
         )
         fig.update_layout(
-            geo=dict(bgcolor= 'rgba(0,0,0,0)'),
+            geo=dict(
+                bgcolor='rgba(0,0,0,0)',
+                showland=True,
+                landcolor="black",
+                showocean=True,
+                oceancolor="darkblue",
+                lakecolor="darkblue",
+                showcountries=True,
+                countrycolor="white"
+            ),
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
             margin={"r":0,"t":0,"l":0,"b":0},
-            dragmode=False
+            dragmode=False,
         )
 
         st.plotly_chart(fig, use_container_width=True)
