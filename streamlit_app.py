@@ -401,8 +401,8 @@ with mainpage:
     # Add content to the first column
     with col1:
         
-        lon_min, lon_max = -10, 35
-        lat_min, lat_max = 34, 71
+        lon_min, lon_max = -15, 40
+        lat_min, lat_max = 35, 75
         #st.header("Map")
         #st.write(df_filtered)
         nuts = get_nuts()
