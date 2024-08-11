@@ -400,11 +400,13 @@ with mainpage:
     # Add content to the first column
     with col1:
         
-        
+        lon_min, lon_max = -10, 35
+        lat_min, lat_max = 34, 71
         #st.header("Map")
         #st.write(df_filtered)
         nuts = get_nuts()
-    
+        nuts = nuts[(nuts.geometry.centroid.x >= lon_min) & (nuts.geometry.centroid.x <= lon_max) &
+            (nuts.geometry.centroid.y >= lat_min) & (nuts.geometry.centroid.y <= lat_max)]
         oneYear_df_eust = df_filtered[df_eust['date'] == to_date]
     
         merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
@@ -431,8 +433,8 @@ with mainpage:
             fitbounds="locations",
             visible=False,
             projection_type="mercator",
-            lonaxis_range=[-10, 35],
-            lataxis_range=[34, 71],
+            lonaxis_range=[lon_min, lon_max], 
+            lataxis_range=[lat_min, lat_max],
         )
         fig.update_layout(
             geo=dict(
