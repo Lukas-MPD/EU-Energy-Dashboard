@@ -46,10 +46,10 @@ def get_eust_data(dataframe: str, lst_vars: list):
     df.rename(columns={'geo\\TIME_PERIOD': 'geo'}, inplace=True)
 
     # Melt the dataframe to long format
-    df_melted = pd.melt(df, id_vars=lst_vars, var_name='date', value_name='value')
+    df_melted = pd.melt(df, id_vars=lst_vars, var_name='datetime', value_name='value')
     
     # Convert 'date' to datetime objects
-    df_melted['datetime'] = pd.to_datetime(df_melted['date'])
+    df_melted['datetime'] = pd.to_datetime(df_melted['datetime'])
 
     # Extract date part (datetime.date objects)
     df_melted['date'] = df_melted['datetime'].dt.date
@@ -64,7 +64,7 @@ def per_capita(df):
     pop.rename(columns={'geo\\TIME_PERIOD': 'geo'}, inplace=True)
 
     for ind in df.index:
-        year = df.loc[ind, 'datetime'].year
+        year = str(df.loc[ind, 'datetime'].year)
         geo = df.loc[ind, 'geo']
         pop_filtered = pop[pop['geo'] == geo]
         
