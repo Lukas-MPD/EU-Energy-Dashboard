@@ -412,6 +412,7 @@ with mainpage:
         # Ensure the GeoDataFrame contains only necessary columns
         merged = merged[['CNTR_CODE', 'value', 'geometry']]
 
+        merged['value'] = merged['value'].fillna(-1)
 
         fig = px.choropleth(
             merged,
@@ -421,8 +422,9 @@ with mainpage:
             hover_name='CNTR_CODE',
             hover_data=['value'],
             color_continuous_scale='Viridis',
-            labels={'value': 'Legend Name'},
-            color_continuous_midpoint=merged['value'].mean()
+            color_continuous_scale=[[0, 'grey'], [0.0001, 'yellow'], [1, 'purple']],
+            range_color=(-1, merged['value'].max()), 
+            labels={'value': 'Legend Name'}
         )
         
         # Update layout for dark theme and disable scrolling
@@ -449,8 +451,6 @@ with mainpage:
             margin={"r":0,"t":0,"l":0,"b":0},
             dragmode=False,
         )
-
-        fig.update_traces(marker=dict(line=dict(color='grey', width=0.5)))
         
         st.plotly_chart(fig, use_container_width=True)
         
