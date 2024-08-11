@@ -64,27 +64,28 @@ def per_capita(df):
     pop.rename(columns={'geo\\TIME_PERIOD': 'geo'}, inplace=True)
 
     for ind in df.index:
-        year = df['datetime'][ind].dt.year
-        geo = df['geo'][ind]
-        pop_filterd = pop[(pop['geo'] == geo)]
-        if pop_filterd[year][0]:
-            pop_val = pop_filterd[year][0]
+        year = df.loc[ind, 'datetime'].year
+        geo = df.loc[ind, 'geo']
+        pop_filtered = pop[pop['geo'] == geo]
+        
+        pop_val = None  # Initialize pop_val in the outer scope
+
+        if year in pop_filtered.columns and not pop_filtered[year].empty:
+            pop_val = pop_filtered[year].iloc[0]
         else:
             for i in range(5):
-                year_temp = year - 1
-                if year_temp in pop.columns:
-                    if pop_filterd[year_temp][0]:
-                        pop_val = pop_filterd[year_temp][0]
-                        break
-                if i == 4:
-                    pop_val = None
+                year_temp = year - i - 1
+                if year_temp in pop_filtered.columns and not pop_filtered[year_temp].empty:
+                    pop_val = pop_filtered[year_temp].iloc[0]
+                    break
 
-            
         if pop_val:
-            df['value'][ind] = df['value'][ind]/pop_val
+            df.loc[ind, 'value'] = df.loc[ind, 'value'] / pop_val
         else:
-            df['value'][ind] = None
+            df.loc[ind, 'value'] = None
+
     return df
+
 
 @st.cache_data
 def get_nuts():
@@ -449,7 +450,28 @@ with mainpage:
     # Add content to the second column
     with col2:
         st.header("Radial-Bar-Cart")
-    
+            
+        monthly_mean = df_filterd
+        
+        monthly_mean['month'] = monthly_mean['datetime'].dt.month
+
+        df_filterd['month_name'] = df_filterd['datetime'].dt.month_name()
+
+        st.write(monthly_mean)
+        
+        # Group by month and calculate the mean of the 'value' column
+        monthly_mean = monthly_mean.groupby(['geo', 'month', 'month_name'])['value'].mean().reset_index()
+
+        line_r_range = [1.0, monthly_mean['value'].max()]
+        
+        fig_line_polar = px.line_polar(monthly_mean,
+                                     r = 'value', log_r = False, range_r = line_r_range,
+                                     theta = 'month_name',
+                                     color = 'geo', line_close=True, template="plotly_dark", 
+                                    )
+
+        st.plotly_chart(fig_line_polar)
+
         #min_date = df_eust['timestamp'].min()
         #max_date = df_eust['timestamp'].max()
     
@@ -465,32 +487,6 @@ with mainpage:
         #st.write(f'From date: {from_date} to date: {to_date}')
     
         # st.line_chart(df_filterd, x='date', y='value',color='geo')
-        
-        monthly_mean = df_filterd
-        
-        monthly_mean['month'] = monthly_mean['datetime'].dt.month
-
-        df_filterd['month_name'] = df_filterd['datetime'].dt.month_name()
-
-        st.write(monthly_mean)
-        
-        # Group by month and calculate the mean of the 'value' column
-        monthly_mean = monthly_mean.groupby(['geo', 'month', 'month_name'])['value'].mean().reset_index()
-        
-        st.write(monthly_mean)
-
-        line_r_range = [1.0, monthly_mean['value'].max()]
-
-        st.write(line_r_range)
-        
-        fig_line_polar = px.line_polar(monthly_mean,
-                                     r = 'value', log_r = False, range_r = line_r_range,
-                                     theta = 'month_name',
-                                     color = 'geo', line_close=True, template="plotly_dark", 
-                                    )
-
-        st.plotly_chart(fig_line_polar)
-            
         # center on Liberty Bell, add marker
         #m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
         #folium.Marker(
