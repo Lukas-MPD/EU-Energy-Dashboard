@@ -14,6 +14,7 @@ import xml.etree.ElementTree as ET
 import requests
 import plotly.express as px
 import numpy as np
+from shapely.geometry import MultiPolygon, Polygon
 
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
