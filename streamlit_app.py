@@ -428,7 +428,7 @@ with mainpage:
         fig.update_geos(
             fitbounds="locations",
             visible=False,
-            projection_type="mercator"
+            projection_type="mercator",
             lonaxis_range=[-10, 35],
             lataxis_range=[34, 71],
         )
