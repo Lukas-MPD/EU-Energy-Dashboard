@@ -429,12 +429,14 @@ with mainpage:
             fitbounds="locations",
             visible=False,
             projection_type="mercator"
+            lonaxis_range=[-10, 35],
+            lataxis_range=[34, 71],
         )
         fig.update_layout(
             geo=dict(
                 bgcolor='rgba(0,0,0,0)',
                 showland=True,
-                landcolor="grey",
+                landcolor="black",
                 showocean=True,
                 oceancolor="black",
                 lakecolor="black",
@@ -447,6 +449,8 @@ with mainpage:
             dragmode=False,
         )
 
+        fig.update_traces(marker=dict(line=dict(color='grey', width=0.5)))
+        
         st.plotly_chart(fig, use_container_width=True)
         
         # Convert GeoDataFrame to GeoJSON
