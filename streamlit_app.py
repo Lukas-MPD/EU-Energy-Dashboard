@@ -422,6 +422,7 @@ with mainpage:
             hover_data=['value'],
             color_continuous_scale='Viridis',
             labels={'value': 'Legend Name'},
+            color_continuous_midpoint=merged['value'].mean()
         )
         
         # Update layout for dark theme and disable scrolling
