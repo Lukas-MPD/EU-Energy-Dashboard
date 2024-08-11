@@ -405,8 +405,30 @@ with mainpage:
         #st.header("Map")
         #st.write(df_filtered)
         nuts = get_nuts()
-        nuts = nuts[(nuts.geometry.centroid.x >= lon_min) & (nuts.geometry.centroid.x <= lon_max) &
-            (nuts.geometry.centroid.y >= lat_min) & (nuts.geometry.centroid.y <= lat_max)]
+        def filter_multipolygons(gdf, lon_min, lon_max, lat_min, lat_max):
+            def filter_polygon(polygon):
+                if polygon.centroid.x >= lon_min and polygon.centroid.x <= lon_max and polygon.centroid.y >= lat_min and polygon.centroid.y <= lat_max:
+                    return polygon
+                return None
+        
+            filtered_geometries = []
+            for geom in gdf.geometry:
+                if isinstance(geom, MultiPolygon):
+                    filtered_parts = [filter_polygon(p) for p in geom.geoms if filter_polygon(p) is not None]
+                    if filtered_parts:
+                        filtered_geometries.append(MultiPolygon(filtered_parts))
+                    else:
+                        filtered_geometries.append(None)
+                elif isinstance(geom, Polygon):
+                    filtered_geometries.append(filter_polygon(geom))
+                else:
+                    filtered_geometries.append(None)
+            
+            gdf = gdf.copy()
+            gdf['geometry'] = filtered_geometries
+            return gdf.dropna(subset=['geometry'])
+        
+        nuts = filter_multipolygons(nuts, lon_min, lon_max, lat_min, lat_max)
         oneYear_df_eust = df_filtered[df_eust['date'] == to_date]
     
         merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
