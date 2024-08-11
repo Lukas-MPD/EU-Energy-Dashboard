@@ -434,10 +434,10 @@ with mainpage:
             geo=dict(
                 bgcolor='rgba(0,0,0,0)',
                 showland=True,
-                landcolor="black",
+                landcolor="grey",
                 showocean=True,
-                oceancolor="darkblue",
-                lakecolor="darkblue",
+                oceancolor="black",
+                lakecolor="black",
                 showcountries=True,
                 countrycolor="white"
             ),
