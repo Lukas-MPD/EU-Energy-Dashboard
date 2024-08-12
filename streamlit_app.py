@@ -459,7 +459,6 @@ with mainpage:
             nuts,
             geojson=merged.geometry.__geo_interface__,
             locations=merged.index,
-            color='value',
             color_continuous_scale=[[0, 'grey'], [1, 'grey']],
         )
         
