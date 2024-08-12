@@ -15,6 +15,7 @@ import requests
 import plotly.express as px
 import numpy as np
 from shapely.geometry import MultiPolygon, Polygon
+import plotly.graph_objects as go
 
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
@@ -454,11 +455,6 @@ with mainpage:
         
         merged['value'] = merged['value'].fillna(-1)
 
-        fig_base = px.choropleth(
-            nuts,
-            geojson=merged.geometry.__geo_interface__
-        )
-        st.plotly_chart(fig_base, use_container_width=True)
         fig = px.choropleth(
             merged,
             geojson=merged.geometry.__geo_interface__,
@@ -471,6 +467,18 @@ with mainpage:
             labels={'value': 'Legend Name'}
         )
 
+        nuts_trace = go.Scattergeo(
+            geojson=nuts.geometry.__geo_interface__,
+            locations=nuts.index,
+            mode='none',  # No markers or lines, just fill
+            fill='toself',  # Fill the polygons
+            fillcolor='grey',
+            hoverinfo='skip',  # Skip hover info for this layer
+            showlegend=False
+        )
+
+        fig.add_trace(nuts_trace)
+        
         # Update layout for dark theme and disable scrolling
         fig.update_geos(
             fitbounds="locations",
