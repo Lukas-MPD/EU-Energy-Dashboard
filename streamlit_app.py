@@ -512,7 +512,6 @@ with mainpage:
     
     # Add content to the second column
     with col2:
-        st.header("Radial-Bar-Cart")
 
         monthly_mean = df_filtered
         
