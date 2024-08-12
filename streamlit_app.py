@@ -465,45 +465,50 @@ with mainpage:
         st.write(percentile75)
         
         merged['value'] = merged['value'].fillna(-1)
-        
-        fig = px.choropleth(
-            merged,
-            geojson=merged.geometry.__geo_interface__,
-            locations=merged.index,
-            color='value',
-            hover_name='CNTR_CODE',
-            hover_data=['value'],
-            color_continuous_scale=[[0, 'grey'], [0.0001, 'darkblue'], [percentile25, 'purple'], [median_value, 'yellow'], [percentile75, 'orange'], [1, 'red']],
-            range_color=(-1, max_value), 
-            labels={'value': 'Legend Name'}
-        )
-        
-        # Update layout for dark theme and disable scrolling
-        fig.update_geos(
-            fitbounds="locations",
-            visible=False,
-            projection_type="mercator",
-            lonaxis_range=[lon_min, lon_max], 
-            lataxis_range=[lat_min, lat_max],
-        )
-        fig.update_layout(
-            geo=dict(
-                bgcolor='rgba(0,0,0,0)',
-                #showland=False,
-                #landcolor="black",
-                #showocean=False,
-                #oceancolor="black",
-                #lakecolor="black",
-                #showcountries=False,
-                #countrycolor="white"
-            ),
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            margin={"r":0,"t":0,"l":0,"b":0},
-            dragmode=False,
-        )
-        
-        st.plotly_chart(fig, use_container_width=True)
+
+        try:
+            fig = px.choropleth(
+                merged,
+                geojson=merged.geometry.__geo_interface__,
+                locations=merged.index,
+                color='value',
+                hover_name='CNTR_CODE',
+                hover_data=['value'],
+                color_continuous_scale=[[0, 'grey'], [0.0001, 'darkblue'], [percentile25, 'purple'], [median_value, 'yellow'], [percentile75, 'orange'], [1, 'red']],
+                range_color=(-1, max_value), 
+                labels={'value': 'Legend Name'}
+            )
+            
+            # Update layout for dark theme and disable scrolling
+            fig.update_geos(
+                fitbounds="locations",
+                visible=False,
+                projection_type="mercator",
+                lonaxis_range=[lon_min, lon_max], 
+                lataxis_range=[lat_min, lat_max],
+            )
+            fig.update_layout(
+                geo=dict(
+                    bgcolor='rgba(0,0,0,0)',
+                    #showland=False,
+                    #landcolor="black",
+                    #showocean=False,
+                    #oceancolor="black",
+                    #lakecolor="black",
+                    #showcountries=False,
+                    #countrycolor="white"
+                ),
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)',
+                margin={"r":0,"t":0,"l":0,"b":0},
+                dragmode=False,
+            )
+            
+            st.plotly_chart(fig, use_container_width=True)
+        except:
+            st.write("No country selected")
+            
+            
     
     # Add content to the second column
     with col2:
