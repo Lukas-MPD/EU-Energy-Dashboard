@@ -448,9 +448,17 @@ with mainpage:
         # Ensure the GeoDataFrame contains only necessary columns
         merged = merged[['CNTR_CODE', 'value', 'geometry']]
 
-        percentile25 = merged['value'].quantile(.25)
-        median_value = merged['value'].median()
-        percentile75 = merged['value'].quantile(.75)
+        if len(merged['a'].unique()) == 1 and pd.isna(merged['a'].unique()):
+            percentile25 = 0.25
+            median_value = 0.5
+            percentile75 = 0.75
+            max_value = 1
+        else:
+            max_value = merged['value'].max()
+            percentile25 = merged['value'].quantile(.25) / max_value
+            median_value = merged['value'].median() / max_value
+            percentile75 = merged['value'].quantile(.75) / max_value
+
         
         merged['value'] = merged['value'].fillna(-1)
         
@@ -461,8 +469,8 @@ with mainpage:
             color='value',
             hover_name='CNTR_CODE',
             hover_data=['value'],
-            color_continuous_scale=[[0, 'grey'], [0.0001, 'darkblue'], [percentile25 / merged['value'].max(), 'purple'], [median_value / merged['value'].max(), 'yellow'], [percentile75 / merged['value'].max(), 'orange'], [1, 'red']],
-            range_color=(-1, merged['value'].max()), 
+            color_continuous_scale=[[0, 'grey'], [0.0001, 'darkblue'], [percentile25, 'purple'], [median_value, 'yellow'], [percentile75, 'orange'], [1, 'red']],
+            range_color=(-1, max_value), 
             labels={'value': 'Legend Name'}
         )
         
