@@ -408,6 +408,8 @@ with mainpage:
             value=to_date,
             format="YYYY-MM"
         )
+
+        map_date = map_date.replace(day=1)
         
         lon_min, lon_max = -25, 42
         lat_min, lat_max = 35, 72
@@ -476,7 +478,7 @@ with mainpage:
                 showocean=True,
                 oceancolor="black",
                 lakecolor="black",
-                showcountries=True,
+                showcountries=False,
                 countrycolor="white"
             ),
             paper_bgcolor='rgba(0,0,0,0)',
