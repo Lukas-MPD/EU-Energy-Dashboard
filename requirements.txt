@@ -2,6 +2,4 @@ streamlit
 pandas
 eurostat
 geopandas
-folium
-streamlit_folium
 plotly

@@ -5,11 +5,6 @@ import math
 from pathlib import Path
 import eurostat as eust
 from datetime import datetime
-import pydeck as pdk
-import folium
-from streamlit_folium import folium_static
-from streamlit_folium import st_folium
-import streamlit.components.v1 as components
 import xml.etree.ElementTree as ET
 import requests
 import plotly.express as px
