@@ -461,7 +461,7 @@ with mainpage:
             locations=merged.index,
             color='value',
             color_continuous_scale=[[0, 'grey'], [1, 'grey']],
-            showscale=False,
+            showscale=False,)
         
         fig_choro = px.choropleth(
             merged,
