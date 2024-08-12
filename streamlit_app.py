@@ -386,10 +386,11 @@ with mainpage:
     
     with st.container():
 
-        dict_df = toc[df_name]
-
+        toc_df = toc[df_name]
+        
         st.write(dict_filters)
-        st.write(dict_df)
+        st.write(dic_df)
+        st.write(toc_df)
 
         fig_line_chart = px.line(df_filtered, x='date', y='value', color='geo', color_discrete_map=color_map)
         st.plotly_chart(fig_line_chart)
