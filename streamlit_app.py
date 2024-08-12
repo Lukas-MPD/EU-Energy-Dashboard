@@ -453,7 +453,12 @@ with mainpage:
         percentile75 = merged['value'].quantile(.75)
         
         merged['value'] = merged['value'].fillna(-1)
-        
+
+        fig_base = px.choropleth(
+            nuts,
+            geojson=merged.geometry.__geo_interface__
+        )
+        st.plotly_chart(fig_base, use_container_width=True)
         fig = px.choropleth(
             merged,
             geojson=merged.geometry.__geo_interface__,
@@ -461,11 +466,11 @@ with mainpage:
             color='value',
             hover_name='CNTR_CODE',
             hover_data=['value'],
-            color_continuous_scale=[[0, 'grey'], [0.0001, 'darkblue'], [percentile25 / merged['value'].max(), 'purple'], [median_value / merged['value'].max(), 'yellow'], [percentile75 / merged['value'].max(), 'orange'], [1, 'red']],
-            range_color=(-1, merged['value'].max()), 
+            color_continuous_scale=[[0, 'darkblue'], [percentile25 / merged['value'].max(), 'purple'], [median_value / merged['value'].max(), 'yellow'], [percentile75 / merged['value'].max(), 'orange'], [1, 'red']],
+            range_color=(0, merged['value'].max()), 
             labels={'value': 'Legend Name'}
         )
-        
+
         # Update layout for dark theme and disable scrolling
         fig.update_geos(
             fitbounds="locations",
