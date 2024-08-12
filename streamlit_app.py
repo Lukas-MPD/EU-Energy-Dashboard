@@ -386,6 +386,11 @@ with mainpage:
     
     with st.container():
 
+        dict_df = [i for i in toc if toc[i]['title']==df_name_long]
+
+        st.write(dict_filters)
+        st.write(dict_df)
+
         fig_line_chart = px.line(df_filtered, x='date', y='value', color='geo', color_discrete_map=color_map)
         st.plotly_chart(fig_line_chart)
         # st.line_chart(df_filtered, x='date', y='value',color='geo')
