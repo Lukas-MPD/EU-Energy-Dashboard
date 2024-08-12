@@ -81,7 +81,7 @@ def per_capita(df):
                     break
 
         if pop_val:
-            df.loc[ind, 'value'] = df.loc[ind, 'value'] / pop_val
+            df.loc[ind, 'value'] = df.loc[ind, 'value'] / pop_val * 10000
         else:
             df.loc[ind, 'value'] = None
 
@@ -287,7 +287,7 @@ with sidebar:
 
     tot_or_cap = st.radio(
         "Display data in:",
-        ['Total', 'Per Capita'])
+        ['total', 'per 10,000 inhabitants'])
     
     toc, toc_names = get_toc()
 
@@ -380,7 +380,7 @@ with sidebar:
 
     dict_filters.update({'unit': unit})
     
-    if tot_or_cap == 'Per Capita':
+    if tot_or_cap == 'per 10,000 inhabitants':
         df_filtered = per_capita(df_filtered)
 
 with mainpage:
