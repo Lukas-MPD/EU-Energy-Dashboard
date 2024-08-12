@@ -455,26 +455,20 @@ with mainpage:
         
         merged['value'] = merged['value'].fillna(-1)
 
-        fig = px.choropleth(
-            nuts,
-            geojson=merged.geometry.__geo_interface__,
-            locations=merged.index,
-            color_continuous_scale=[[0, 'grey'], [1, 'grey']],
-        )
+
         
-        fig_choro = px.choropleth(
+        fig = px.choropleth(
             merged,
             geojson=merged.geometry.__geo_interface__,
             locations=merged.index,
             color='value',
             hover_name='CNTR_CODE',
             hover_data=['value'],
-            color_continuous_scale=[[0, 'darkblue'], [percentile25 / merged['value'].max(), 'purple'], [median_value / merged['value'].max(), 'yellow'], [percentile75 / merged['value'].max(), 'orange'], [1, 'red']],
+            color_continuous_scale=[[0.00001, 'grey'], [0.00001, 'darkblue'], [percentile25 / merged['value'].max(), 'purple'], [median_value / merged['value'].max(), 'yellow'], [percentile75 / merged['value'].max(), 'orange'], [1, 'red']],
             range_color=(0, merged['value'].max()), 
             labels={'value': 'Legend Name'}
         )
 
-        fig.add_trace(fig_choro)
         
         # Update layout for dark theme and disable scrolling
         fig.update_geos(
