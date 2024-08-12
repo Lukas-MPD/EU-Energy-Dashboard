@@ -456,6 +456,14 @@ with mainpage:
         merged['value'] = merged['value'].fillna(-1)
 
         fig = px.choropleth(
+            nuts,
+            geojson=merged.geometry.__geo_interface__,
+            locations=merged.index,
+            color='value',
+            color_continuous_scale=[[0, 'grey'], [1, 'grey']],
+            showscale=False,
+        
+        fig_choro = px.choropleth(
             merged,
             geojson=merged.geometry.__geo_interface__,
             locations=merged.index,
@@ -467,17 +475,7 @@ with mainpage:
             labels={'value': 'Legend Name'}
         )
 
-        nuts_trace = go.Scattergeo(
-            geojson=merged.geometry.__geo_interface__,
-            locations=merged.index,
-            mode='none',  # No markers or lines, just fill
-            fill='toself',  # Fill the polygons
-            fillcolor='grey',
-            hoverinfo='skip',  # Skip hover info for this layer
-            showlegend=False
-        )
-
-        fig.add_trace(nuts_trace)
+        fig.add_trace(fig_choro)
         
         # Update layout for dark theme and disable scrolling
         fig.update_geos(
