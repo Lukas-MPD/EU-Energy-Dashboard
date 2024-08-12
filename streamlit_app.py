@@ -448,7 +448,7 @@ with mainpage:
         # Ensure the GeoDataFrame contains only necessary columns
         merged = merged[['CNTR_CODE', 'value', 'geometry']]
 
-        if len(merged['a'].unique()) == 1 and pd.isna(merged['a'].unique()):
+        if len(merged['value'].unique()) == 1 and pd.isna(merged['value'].unique()):
             percentile25 = 0.25
             median_value = 0.5
             percentile75 = 0.75
