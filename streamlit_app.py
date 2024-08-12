@@ -400,12 +400,21 @@ with mainpage:
     
     # Add content to the first column
     with col1:
+
+        map_date = st.slider(
+            'Choose a date for the map:',
+            min_value= from_date,
+            max_value= to_date,
+            value=to_date,
+            format="YYYY-MM"
+        )
         
         lon_min, lon_max = -25, 42
         lat_min, lat_max = 35, 72
         #st.header("Map")
         #st.write(df_filtered)
         nuts = get_nuts()
+        
         def filter_multipolygons(gdf, lon_min, lon_max, lat_min, lat_max):
             def filter_polygon(polygon):
                 if polygon.centroid.x >= lon_min and polygon.centroid.x <= lon_max and polygon.centroid.y >= lat_min and polygon.centroid.y <= lat_max:
@@ -430,7 +439,7 @@ with mainpage:
             return gdf.dropna(subset=['geometry'])
         
         nuts = filter_multipolygons(nuts, lon_min, lon_max, lat_min, lat_max)
-        oneYear_df_eust = df_filtered[df_eust['date'] == to_date]
+        oneYear_df_eust = df_filtered[df_eust['date'] == map_date]
     
         merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
     
@@ -477,54 +486,11 @@ with mainpage:
         )
         
         st.plotly_chart(fig, use_container_width=True)
-        
-        # Convert GeoDataFrame to GeoJSON
-        geojson_data = merged.to_json()
-    
-        # Create a base map
-        m = folium.Map(location=[55.00, 13.0],
-                       # zoom_start=3,
-                       zoom_control=False,
-                       scrollWheelZoom=False,
-                       dragging=False)
-    
-        folium.Choropleth(
-            geo_data=geojson_data,
-            data=merged,
-            columns=['CNTR_CODE', 'value'],
-            key_on='feature.properties.CNTR_CODE',
-            fill_color='YlOrRd',
-            fill_opacity=0.7,
-            line_opacity=0.2,
-            legend_name='Legend Name',
-            tooltip=folium.GeoJsonTooltip(fields=['CNTR_CODE'], aliases=['Country Code:'])
-        ).add_to(m)
-    
-        bounds = [[34.5, -10.5], [71.0, 35]]  # [min_lat, min_lng], [max_lat, max_lng]
-        
-        m.fit_bounds(bounds)
-        
-        css = """
-        <div style="width:100%;height:0;padding-bottom:100%;position:absolute;">
-          <div style="position:absolute;top:0;left:0;width:100%;height:100%;">
-            {map}
-          </div>
-        </div>
-        """
-        # Get the HTML representation of the Folium map
-        map_html = m.get_root().render()
-        
-        # Insert the map into the CSS container
-        html = css.format(map=map_html)
-        
-        # Render the map with Streamlit
-        st.components.v1.html(html, height=500, scrolling=False)
     
     # Add content to the second column
     with col2:
         st.header("Radial-Bar-Cart")
-        #if tot_or_cap == 'Per Capita':
-            #st.write(df_filtered2)
+
         monthly_mean = df_filtered
         
         monthly_mean['month'] = monthly_mean['datetime'].dt.month
@@ -544,26 +510,3 @@ with mainpage:
 
         st.plotly_chart(fig_line_polar)
 
-        #min_date = df_eust['timestamp'].min()
-        #max_date = df_eust['timestamp'].max()
-    
-        #st.write(f'From date: {from_date} to date: {to_date}')
-        #st.write(df_eust)
-    
-        
-        
-        # Filter the data
-    
-        #st.write(filtered_df_eust)
-        # Display the selected dates
-        #st.write(f'From date: {from_date} to date: {to_date}')
-    
-        # st.line_chart(df_filtered, x='date', y='value',color='geo')
-        # center on Liberty Bell, add marker
-        #m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
-        #folium.Marker(
-        #    [39.949610, -75.150282], popup="Liberty Bell", tooltip="Liberty Bell"
-        #).add_to(m)
-        
-        # call to render Folium map in Streamlit
-        #st_data = st_folium(m, width=725)
