@@ -453,6 +453,11 @@ with mainpage:
             median_value = 0.5
             percentile75 = 0.75
             max_value = 1
+        elif len(merged['value'].unique()) == 1:
+            percentile25 = 0.25
+            median_value = 0.5
+            percentile75 = 0.75
+            max_value = merged['value'].max()
         else:
             max_value = merged['value'].max()
             percentile25 = merged['value'].quantile(.25) / max_value
