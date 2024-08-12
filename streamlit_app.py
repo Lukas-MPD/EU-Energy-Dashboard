@@ -411,8 +411,8 @@ with mainpage:
 
         map_date = map_date.replace(day=1)
         
-        lon_min, lon_max = -25, 45
-        lat_min, lat_max = 35, 72
+        lon_min, lon_max = -25, 42
+        lat_min, lat_max = 35, 75
         #st.header("Map")
         #st.write(df_filtered)
         nuts = get_nuts()
