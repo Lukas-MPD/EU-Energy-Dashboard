@@ -473,13 +473,13 @@ with mainpage:
         fig.update_layout(
             geo=dict(
                 bgcolor='rgba(0,0,0,0)',
-                showland=True,
-                landcolor="black",
-                showocean=True,
-                oceancolor="black",
-                lakecolor="black",
-                showcountries=False,
-                countrycolor="white"
+                #showland=False,
+                #landcolor="black",
+                #showocean=False,
+                #oceancolor="black",
+                #lakecolor="black",
+                #showcountries=False,
+                #countrycolor="white"
             ),
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
