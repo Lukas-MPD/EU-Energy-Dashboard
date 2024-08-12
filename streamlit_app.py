@@ -386,7 +386,7 @@ with mainpage:
     
     with st.container():
 
-        dict_df = [i for i in toc if toc[i]['title']==df_name_long]
+        dict_df = toc[df_name]
 
         st.write(dict_filters)
         st.write(dict_df)
