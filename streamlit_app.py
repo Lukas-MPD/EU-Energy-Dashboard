@@ -448,8 +448,10 @@ with mainpage:
         # Ensure the GeoDataFrame contains only necessary columns
         merged = merged[['CNTR_CODE', 'value', 'geometry']]
 
+        median_value = merged['value'].median()
+        
         merged['value'] = merged['value'].fillna(-1)
-
+        
         fig = px.choropleth(
             merged,
             geojson=merged.geometry.__geo_interface__,
@@ -457,7 +459,7 @@ with mainpage:
             color='value',
             hover_name='CNTR_CODE',
             hover_data=['value'],
-            color_continuous_scale=[[0, 'grey'], [0.0001, 'yellow'], [0.5, 'orange'], [1, 'purple']],
+            color_continuous_scale=[[0, 'grey'], [0.0001, 'yellow'], [median_value / merged['value'].max(), 'orange'], [1, 'purple']],
             range_color=(-1, merged['value'].max()), 
             labels={'value': 'Legend Name'}
         )
