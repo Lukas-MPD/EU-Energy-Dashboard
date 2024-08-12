@@ -457,7 +457,7 @@ with mainpage:
             color='value',
             hover_name='CNTR_CODE',
             hover_data=['value'],
-            color_continuous_scale=[[0, 'grey'], [0.0001, 'yellow'], [1, 'purple']],
+            color_continuous_scale=[[0, 'grey'], [0.0001, 'yellow'], [0.5, 'orange'], [1, 'purple']],
             range_color=(-1, merged['value'].max()), 
             labels={'value': 'Legend Name'}
         )
