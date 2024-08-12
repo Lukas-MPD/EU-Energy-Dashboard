@@ -468,8 +468,8 @@ with mainpage:
         )
 
         nuts_trace = go.Scattergeo(
-            geojson=nuts.geometry.__geo_interface__,
-            locations=nuts.index,
+            geojson=merged.geometry.__geo_interface__,
+            locations=merged.index,
             mode='none',  # No markers or lines, just fill
             fill='toself',  # Fill the polygons
             fillcolor='grey',
