@@ -463,11 +463,6 @@ with mainpage:
             percentile25 = merged['value'].quantile(.25) / max_value
             median_value = merged['value'].median() / max_value
             percentile75 = merged['value'].quantile(.75) / max_value
-
-        st.write(max_value)
-        st.write(percentile25)
-        st.write(median_value)
-        st.write(percentile75)
         
         merged['value'] = merged['value'].fillna(-1)
 
