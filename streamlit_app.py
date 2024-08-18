@@ -529,7 +529,7 @@ with mainpage:
             fig.update_traces(
                 hovertemplate='<b>%{hovertext}</b><br>' + filtered_descriptions_str + ': %{customdata[0]}<extra></extra>',
                 hovertext=merged['country_name'],
-                customdata=merged[['value_custom']].to_numpy()
+                customdata=merged['value_custom']
             )
             st.plotly_chart(fig, use_container_width=True)
         except:
