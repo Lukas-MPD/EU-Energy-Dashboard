@@ -386,7 +386,7 @@ with mainpage:
 
     st.header(toc_df['title'])
 
-    f"This dataset contains data from {toc_df['dataStart']} to {toc_df['dataEnd']} and contains {toc_df['values']} values. It was updated {toc_df['lastUpdate']} and last modified {toc_df['lastModified']}. You can view the metadata (here)[{toc_df['metadata']}] and download the data (here)[{toc_df['downloadLink']}]"
+    f"This dataset contains data from {toc_df['dataStart']} to {toc_df['dataEnd']} and contains {toc_df['values']} values. It was updated {toc_df['lastUpdate']} and last modified {toc_df['lastModified']}. You can view the metadata [here]({toc_df['metadata']}) and download the data [here]({toc_df['downloadLink']})"
     
     with st.container():
         
