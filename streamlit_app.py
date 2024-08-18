@@ -1,15 +1,14 @@
 import streamlit as st
 import pandas as pd
 import geopandas as gpd
-import math
 from pathlib import Path
 import eurostat as eust
 from datetime import datetime
 import xml.etree.ElementTree as ET
 import requests
 import plotly.express as px
-import numpy as np
 from shapely.geometry import MultiPolygon, Polygon
+import os
 
 # Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
@@ -327,7 +326,7 @@ with sidebar:
         dict_filters.update({i: selec})
 
         if dic_df[i]['descr'] is not None:
-            st.write(dic_df[i]['descr'])
+            st.info(dic_df[i]['descr'])
 
     countries = [value for value in dic_df['geo']['pars'].values()]
     
@@ -384,9 +383,25 @@ with mainpage:
     color_map = {geo: px.colors.qualitative.Plotly[i % len(px.colors.qualitative.Plotly)] for i, geo in enumerate(unique_geos)}
     toc_df = toc[df_name]
 
-    st.header(toc_df['title'])
+    try:
+        toc_df['lastUpdate'] = datetime.strptime(toc_df['lastUpdate'], '%d.%m.%Y').strftime('%Y-%m-%d')
+        toc_df['downloadLink'] = datetime.strptime(toc_df['downloadLink'], '%d.%m.%Y').strftime('%Y-%m-%d')
+    except:
+        os.write(1,b'Formating "lastUpdate" and/or "downloadLink" did not work.\n')
 
-    f"This dataset contains data from {toc_df['dataStart']} to {toc_df['dataEnd']} and contains {toc_df['values']} values. It was updated {toc_df['lastUpdate']} and last modified {toc_df['lastModified']}. You can view the metadata [here]({toc_df['metadata']}) and download the data [here]({toc_df['downloadLink']})"
+    filtered_descriptions = [
+        dic_df[key]['pars'][value] 
+        for key, values in dict_filters.items() 
+        if key not in ['freq', 'geo']
+        for value in values 
+        if value in dic_df[key]['pars']
+    ]
+
+    filtered_descriptions_str = ", ".join(filtered_descriptions)
+
+    st.subheader(toc_df['title'])
+
+    filtered_descriptions_str
     
     with st.container():
         
@@ -394,7 +409,12 @@ with mainpage:
         st.write(dic_df)
         st.write(toc_df)
 
-        fig_line_chart = px.line(df_filtered, x='date', y='value', color='geo', color_discrete_map=color_map)
+        fig_line_chart = px.line(df_filtered, x='date', y='value', color='geo', color_discrete_map=color_map, labels= {'geo': 'Country'})
+        fig_line_chart.for_each_trace(lambda t: t.update(name = dic_df['geo']['pars'][t.name],
+                                      legendgroup = dic_df['geo']['pars'][t.name],
+                                      hovertemplate = t.hovertemplate.replace(t.name, dic_df['geo']['pars'][t.name])
+                                     )
+                  )
         st.plotly_chart(fig_line_chart)
         # st.line_chart(df_filtered, x='date', y='value',color='geo')
     
@@ -534,4 +554,7 @@ with mainpage:
                                     )
 
         st.plotly_chart(fig_line_polar)
+    
+    with st.container():
+        f"This dataset contains data from {toc_df['dataStart']} to {toc_df['dataEnd']} and contains {toc_df['values']} values. It was updated {toc_df['lastUpdate']} and last modified {toc_df['lastModified']}. You can view the metadata [here]({toc_df['metadata']}) and download the data [here]({toc_df['downloadLink']})."
 
