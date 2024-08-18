@@ -403,9 +403,9 @@ with mainpage:
     
     with st.container():
         
-        st.write(dict_filters)
-        st.write(dic_df)
-        st.write(toc_df)
+        #st.write(dict_filters)
+        #st.write(dic_df)
+        #st.write(toc_df)
 
         fig_line_chart = px.line(df_filtered, x='date', y='value', color='geo', color_discrete_map=color_map, labels= {'geo': 'Country', 'value': filtered_descriptions_str, 'date': 'Date'})
         fig_line_chart.for_each_trace(lambda t: t.update(name = dic_df['geo']['pars'][t.name],
@@ -486,6 +486,7 @@ with mainpage:
             percentile75 = merged['value'].quantile(.75) / max_value
         
         merged['value_nona'] = merged['value'].fillna(-1)
+        merged['value_custom'] = merged['value'].apply(lambda x: 'Null' if x == -1 else x)
         merged['country_name'] = merged['CNTR_CODE'].map(dic_df['geo']['pars'])
 
         try:
@@ -495,7 +496,7 @@ with mainpage:
                 locations=merged.index,
                 color='value_nona',
                 hover_name='country_name',
-                hover_data=['value'],
+                hover_data=['value_custom'],
                 color_continuous_scale=[[0, 'grey'], [0.0001, 'darkblue'], [percentile25, 'purple'], [median_value, 'yellow'], [percentile75, 'orange'], [1, 'red']],
                 range_color=(-1, max_value), 
                 labels={'value_nona': ""}
@@ -528,7 +529,7 @@ with mainpage:
             fig.update_traces(
                 hovertemplate='<b>%{hovertext}</b><br>' + filtered_descriptions_str + ': %{customdata[0]}<extra></extra>',
                 hovertext=merged['country_name'],
-                customdata=merged[['value']].to_numpy()
+                customdata=merged[['value_custom']].to_numpy()
             )
             st.plotly_chart(fig, use_container_width=True)
         except:
