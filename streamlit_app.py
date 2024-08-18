@@ -326,7 +326,7 @@ with sidebar:
         dict_filters.update({i: selec})
 
         if dic_df[i]['descr'] is not None:
-            with st.expander("",icon='i'):
+            with st.expander("",icon=":material/info:"):
                 dic_df[i]['descr']
 
 
