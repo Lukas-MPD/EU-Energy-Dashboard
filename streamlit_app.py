@@ -409,7 +409,7 @@ with mainpage:
         st.write(dic_df)
         st.write(toc_df)
 
-        fig_line_chart = px.line(df_filtered, x='date', y='value', color='geo', color_discrete_map=color_map, labels= {'geo': 'Country'})
+        fig_line_chart = px.line(df_filtered, x='date', y='value', color='geo', color_discrete_map=color_map, labels= {'geo': 'Country', 'value': filtered_descriptions_str, 'date': 'Date'})
         fig_line_chart.for_each_trace(lambda t: t.update(name = dic_df['geo']['pars'][t.name],
                                       legendgroup = dic_df['geo']['pars'][t.name],
                                       hovertemplate = t.hovertemplate.replace(t.name, dic_df['geo']['pars'][t.name])
@@ -496,10 +496,13 @@ with mainpage:
                 locations=merged.index,
                 color='value',
                 hover_name='CNTR_CODE',
-                hover_data=['value'],
+                hover_data={
+                    'index':False,
+                    'value':True
+                },
                 color_continuous_scale=[[0, 'grey'], [0.0001, 'darkblue'], [percentile25, 'purple'], [median_value, 'yellow'], [percentile75, 'orange'], [1, 'red']],
                 range_color=(-1, max_value), 
-                labels={'value': 'Legend Name'}
+                labels={'value': filtered_descriptions_str}
             )
             
             # Update layout for dark theme and disable scrolling
@@ -526,7 +529,11 @@ with mainpage:
                 margin={"r":0,"t":0,"l":0,"b":0},
                 dragmode=False,
             )
-            
+            fig.for_each_trace(lambda t: t.update(name = dic_df['geo']['pars'][t.name],
+                                      legendgroup = dic_df['geo']['pars'][t.name],
+                                      hovertemplate = t.hovertemplate.replace(t.name, dic_df['geo']['pars'][t.name])
+                                     )
+                  )
             st.plotly_chart(fig, use_container_width=True)
         except:
             st.write("No country selected")
@@ -550,9 +557,13 @@ with mainpage:
         fig_line_polar = px.line_polar(monthly_mean,
                                      r = 'value', log_r = False, range_r = line_r_range,
                                      theta = 'month_name',
-                                     color = 'geo', color_discrete_map=color_map, line_close=True, template="plotly_dark", 
+                                     color = 'geo', color_discrete_map=color_map, line_close=True, template="plotly_dark", labels= {'geo': 'Country', 'value': filtered_descriptions_str, 'month_name': 'Month'}
                                     )
-
+        fig_line_polar.for_each_trace(lambda t: t.update(name = dic_df['geo']['pars'][t.name],
+                                      legendgroup = dic_df['geo']['pars'][t.name],
+                                      hovertemplate = t.hovertemplate.replace(t.name, dic_df['geo']['pars'][t.name])
+                                     )
+                  )
         st.plotly_chart(fig_line_polar)
     
     with st.container():
