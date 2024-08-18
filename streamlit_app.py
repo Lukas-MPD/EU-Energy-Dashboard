@@ -326,7 +326,9 @@ with sidebar:
         dict_filters.update({i: selec})
 
         if dic_df[i]['descr'] is not None:
-            st.info(dic_df[i]['descr'])
+            with st.expander(icon='i'):
+                dic_df[i]['descr']
+
 
     countries = [value for value in dic_df['geo']['pars'].values()]
     
