@@ -488,21 +488,18 @@ with mainpage:
             percentile75 = merged['value'].quantile(.75) / max_value
         
         merged['value'] = merged['value'].fillna(-1)
-        merged['country_name'] = merged['CNTR_CODE'].map(dic_df['geo']['pars'])
+
         try:
             fig = px.choropleth(
                 merged,
                 geojson=merged.geometry.__geo_interface__,
                 locations=merged.index,
                 color='value',
-                hover_name='country_name',
-                hover_data={
-                    'index':False,
-                    'value':True
-                },
+                hover_name='CNTR_CODE',
+                hover_data=['value'],
                 color_continuous_scale=[[0, 'grey'], [0.0001, 'darkblue'], [percentile25, 'purple'], [median_value, 'yellow'], [percentile75, 'orange'], [1, 'red']],
                 range_color=(-1, max_value), 
-                labels={'value': filtered_descriptions_str}
+                labels={'value': 'Legend Name'}
             )
             
             # Update layout for dark theme and disable scrolling
@@ -529,12 +526,13 @@ with mainpage:
                 margin={"r":0,"t":0,"l":0,"b":0},
                 dragmode=False,
             )
-
+            
             st.plotly_chart(fig, use_container_width=True)
         except:
             st.write("No country selected")
             
             
+     
     
     # Add content to the second column
     with col2:
