@@ -525,15 +525,7 @@ with mainpage:
                 margin={"r":0,"t":0,"l":0,"b":0},
                 dragmode=False,
             )
-            fig.add_annotation(
-                text="Note: Value = -1 represents Null Values",
-                xref="paper", yref="paper",
-                x=0.5, y=-0.1,
-                showarrow=False,
-                font=dict(size=12, color="white"),
-                align="center",
-                bgcolor="rgba(0,0,0,0.5)"
-            )
+
             fig.update_traces(
                 hovertemplate='<b>%{hovertext}</b><br>' + filtered_descriptions_str + ': %{customdata[0]}<extra></extra>',
                 hovertext=merged['country_name'],
@@ -542,6 +534,8 @@ with mainpage:
             st.plotly_chart(fig, use_container_width=True)
         except:
             st.write("No country selected")
+        
+        "Note: Value = -1 represents Null Values"
             
             
      
