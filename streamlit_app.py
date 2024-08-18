@@ -488,14 +488,14 @@ with mainpage:
             percentile75 = merged['value'].quantile(.75) / max_value
         
         merged['value'] = merged['value'].fillna(-1)
-
+        merged['country_name'] = merged['CNTR_CODE'].map(dic_df['geo']['pars'])
         try:
             fig = px.choropleth(
                 merged,
                 geojson=merged.geometry.__geo_interface__,
                 locations=merged.index,
                 color='value',
-                hover_name='CNTR_CODE',
+                hover_name='country_name',
                 hover_data={
                     'index':False,
                     'value':True
@@ -529,11 +529,7 @@ with mainpage:
                 margin={"r":0,"t":0,"l":0,"b":0},
                 dragmode=False,
             )
-            fig.for_each_trace(lambda t: t.update(name = dic_df['geo']['pars'][t.name],
-                                      legendgroup = dic_df['geo']['pars'][t.name],
-                                      hovertemplate = t.hovertemplate.replace(t.name, dic_df['geo']['pars'][t.name])
-                                     )
-                  )
+
             st.plotly_chart(fig, use_container_width=True)
         except:
             st.write("No country selected")
