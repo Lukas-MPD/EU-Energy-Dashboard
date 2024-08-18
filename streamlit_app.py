@@ -382,11 +382,13 @@ with mainpage:
 
     unique_geos = df_filtered['geo'].unique()
     color_map = {geo: px.colors.qualitative.Plotly[i % len(px.colors.qualitative.Plotly)] for i, geo in enumerate(unique_geos)}
+    toc_df = toc[df_name]
 
+    st.header(toc_df['title'])
+
+    f"This dataset contains data from {toc_df['dataStart']} to {toc_df['dataEnd']} and contains {toc_df['values']} values. It was updated {toc_df['lastUpdate']} and last modified {toc_df['lastModified']}. You can view the metadata (here)[{toc_df['metadata']}] and download the data (here)[{toc_df['downloadLink']}]"
     
     with st.container():
-
-        toc_df = toc[df_name]
         
         st.write(dict_filters)
         st.write(dic_df)
