@@ -497,7 +497,8 @@ with mainpage:
                 hover_name='country_name',
                 hover_data=['value'],
                 color_continuous_scale=[[0, 'grey'], [0.0001, 'darkblue'], [percentile25, 'purple'], [median_value, 'yellow'], [percentile75, 'orange'], [1, 'red']],
-                range_color=(-1, max_value)
+                range_color=(-1, max_value), 
+                labels={'value': ""}
             )
             
             # Update layout for dark theme and disable scrolling
@@ -523,6 +524,15 @@ with mainpage:
                 plot_bgcolor='rgba(0,0,0,0)',
                 margin={"r":0,"t":0,"l":0,"b":0},
                 dragmode=False,
+            )
+            fig.add_annotation(
+                text="Note: Value = -1 represents Null Values",
+                xref="paper", yref="paper",
+                x=0.5, y=-0.1,
+                showarrow=False,
+                font=dict(size=12, color="white"),
+                align="center",
+                bgcolor="rgba(0,0,0,0.5)"
             )
             fig.update_traces(
                 hovertemplate='<b>%{hovertext}</b><br>' + filtered_descriptions_str + ': %{customdata[0]}<extra></extra>',
