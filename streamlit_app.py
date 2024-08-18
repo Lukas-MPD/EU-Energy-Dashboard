@@ -320,15 +320,11 @@ with sidebar:
         var_name = dic_df[i]['name']
         selection = st.selectbox(
                 f'Pick {var_name}:',
-                values
+                values,
+                help=dic_df[i]['descr']
             )
         selec = [subkey for subkey, val in dic_df[i]['pars'].items() if val == selection]
         dict_filters.update({i: selec})
-
-        if dic_df[i]['descr'] is not None:
-            with st.expander("",icon=":material/info:"):
-                dic_df[i]['descr']
-
 
     countries = [value for value in dic_df['geo']['pars'].values()]
     
