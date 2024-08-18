@@ -527,7 +527,7 @@ with mainpage:
                 dragmode=False,
             )
             fig.update_traces(
-                hovertemplate='<b>%{hovertext}</b><br>' + filtered_descriptions_str + ': %{customdata[0]}<extra></extra>',
+                hovertemplate='<b>%{hovertext}</b><br>' + filtered_descriptions_str + ': %{customdata}<extra></extra>',
                 hovertext=merged['country_name'],
                 customdata=merged['value_custom']
             )
