@@ -497,8 +497,7 @@ with mainpage:
                 hover_name='country_name',
                 hover_data=['value'],
                 color_continuous_scale=[[0, 'grey'], [0.0001, 'darkblue'], [percentile25, 'purple'], [median_value, 'yellow'], [percentile75, 'orange'], [1, 'red']],
-                range_color=(-1, max_value), 
-                labels={'value': filtered_descriptions_str}
+                range_color=(-1, max_value)
             )
             
             # Update layout for dark theme and disable scrolling
@@ -525,7 +524,11 @@ with mainpage:
                 margin={"r":0,"t":0,"l":0,"b":0},
                 dragmode=False,
             )
-            
+            fig.update_traces(
+                hovertemplate='<b>%{hovertext}</b><br>' + filtered_descriptions_str + ': %{customdata[0]}<extra></extra>',
+                hovertext=merged['country_name'],
+                customdata=merged[['value']].to_numpy()
+            )
             st.plotly_chart(fig, use_container_width=True)
         except:
             st.write("No country selected")
@@ -557,6 +560,7 @@ with mainpage:
                                       hovertemplate = t.hovertemplate.replace(t.name, dic_df['geo']['pars'][t.name])
                                      )
                   )
+        fig_line_polar.update_layout(showlegend=False)
         st.plotly_chart(fig_line_polar)
     
     with st.container():
