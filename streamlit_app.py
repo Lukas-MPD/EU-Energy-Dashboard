@@ -10,10 +10,9 @@ import plotly.express as px
 from shapely.geometry import MultiPolygon, Polygon
 import os
 
-# Set the title and favicon that appear in the Browser's tab bar.
 st.set_page_config(
     page_title='EU energy dashboard',
-    page_icon=':electric_plug:', # This is an emoji shortcode. Could be a URL too.
+    page_icon=':electric_plug:', 
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -37,19 +36,14 @@ def get_eust_data(dataframe: str, lst_vars: list):
 
     df = pd.DataFrame(data)
 
-    # Rename the column 'geo\\TIME_PERIOD' to 'geo'
     df.rename(columns={'geo\\TIME_PERIOD': 'geo'}, inplace=True)
 
-    # Melt the dataframe to long format
     df_melted = pd.melt(df, id_vars=lst_vars, var_name='datetime', value_name='value')
-    
-    # Convert 'date' to datetime objects
+   
     df_melted['datetime'] = pd.to_datetime(df_melted['datetime'])
 
-    # Extract date part (datetime.date objects)
     df_melted['date'] = df_melted['datetime'].dt.date
-    
-    # Display the transformed dataframe
+
     return df_melted
 
 @st.cache_data
@@ -63,7 +57,7 @@ def per_capita(df):
         geo = df.loc[ind, 'geo']
         pop_filtered = pop[pop['geo'] == geo]
         
-        pop_val = None  # Initialize pop_val in the outer scope
+        pop_val = None 
 
         if year in pop_filtered.columns and not pop_filtered[year].empty:
             pop_val = pop_filtered[year].iloc[0]
@@ -93,7 +87,6 @@ def get_nuts():
 def dic_units(df_name):
     dic_units = eust.get_dic(df_name, 'siec', frmt='df')
 
-    # create dictionary
     descr_to_val = dict(zip(dic_units['descr'], dic_units['val']))
 
     return dic_units, descr_to_val
@@ -103,7 +96,6 @@ def dic_units(df_name):
 def dic_countries(df_name):
     dic_countries = eust.get_dic(df_name, 'geo', frmt='df')
 
-    # create dictionary
     country_to_code = dict(zip(dic_countries['descr'], dic_countries['val']))
 
     return dic_countries, country_to_code
@@ -126,19 +118,17 @@ def get_toc():
 
     def parse_xml_to_dict(element):
         data_dict = {}
-        # Parse attributes of the current element
+
         data_dict.update(element.attrib)
-    
-        # Parse text content of the current element
+
         if element.text and element.text.strip():
             data_dict['text'] = element.text.strip()
-    
-        # Parse child elements
+
         children = list(element)
         if children:
             child_dict = {}
             for child in children:
-                child_tag = child.tag.split('}')[-1]  # Strip namespace
+                child_tag = child.tag.split('}')[-1] 
                 child_dict.setdefault(child_tag, []).append(parse_xml_to_dict(child))
             data_dict.update(child_dict)
     
@@ -146,10 +136,8 @@ def get_toc():
     
     def find_branch_with_code(element, target_code):
         for child in element:
-            # Check if this is a <nt:code> element and if its text matches the target_code
             if child.tag.endswith('code') and child.text == target_code:
                 return element
-            # Recursively search in child elements
             result = find_branch_with_code(child, target_code)
             if result is not None:
                 return result
@@ -159,10 +147,8 @@ def get_toc():
         datasets = {}
         
         def recursive_extract(element):
-            # Check if the current element is of type "dataset"
             if 'type' in element and element['type'] == 'dataset':
                 title = None
-                # Extract required fields
                 code = element.get('code')[0]['text']
                 last_update = element.get('lastUpdate')[0]['text']
                 last_modified = element.get('lastModified')[0]['text']
@@ -171,14 +157,12 @@ def get_toc():
                 values = element.get('values')[0]['text']
                 metadata = next((meta['text'] for meta in element.get('metadata', []) if meta.get('format') == 'html'), None)
                 download_link = next((link['text'] for link in element.get('downloadLink', []) if link.get('format') == 'tsv'), None)
-    
-                # Find the title in English
+
                 for title_element in element.get('title', []):
                     if title_element['language'] == 'en':
                         title = title_element['text']
                         break
-                
-                # If code is found, add to the datasets dictionary
+
                 if code:
                     datasets[code] = {
                         'title': title,
@@ -190,65 +174,40 @@ def get_toc():
                         'metadata': metadata,
                         'downloadLink': download_link
                     }
-            
-            # Recursively process child elements
-            for key, value in element.items(): # why is key not used but written?
+
+            for key, value in element.items():
                 if isinstance(value, list):
                     for child in value:
                         if isinstance(child, dict):
                             recursive_extract(child)
-        
-        # Start the recursion with the top-level dictionary
+
         recursive_extract(data_dict)
         return datasets
-    
-    # Function to get Eurostat TOC XML
+
     def get_eurostat_toc_xml():
         url = 'https://ec.europa.eu/eurostat/api/dissemination/catalogue/toc/xml'
         response = requests.get(url)
-        response.raise_for_status()  # Ensure we notice bad responses
+        response.raise_for_status() 
         return response.content
 
     def filter_dict_by_codes(data, codes):
         return {k: v for k, v in data.items() if k in codes}
-        
-    # Get XML data
+
     xml_data = get_eurostat_toc_xml()
-     
-    # Parse the XML data
+
     root = ET.fromstring(xml_data)
-    
-    # Find the branch with the target <nt:code> value
+
     target_code = 'nrg'
     target_branch = find_branch_with_code(root, target_code)
-    
-    # Parse the target branch to a dictionary if found
+
     if target_branch is not None:
         data_dict = parse_xml_to_dict(target_branch)
     else:
         data_dict = {}
-    
-    # Extract datasets from the parsed data
+
     datasets_dict = extract_datasets(data_dict)
 
-    codes = ['nrg_chdd_m', 'nrg_cb_sffm', 'nrg_cb_oilm', 'nrg_cb_cosm', 'nrg_cb_gasm', 'nrg_cb_em', 'nrg_cb_eim',
-'nrg_cb_pem', 'nrg_t_m', 'nrg_ti_m', 'nrg_ti_oilm', 'nrg_ti_gasm', 'nrg_ti_coifpm', 'nrg_te_m', 'nrg_te_oilm',
-'nrg_te_gasm', 'nrg_stk_m', 'nrg_stk_oilm', 'nrg_stk_oom', 'nrg_stk_oam', 'nrg_stk_oem', 'nrg_stk_gasm']
-
-    
-    #Not working:
-    # 276 │   lst_vars_selec.remove('unit') 'unit' not in list
-    #Crude oil supply - monthly data
-    #Crude oil imports by field of produ
-
-    #App crashed:
-    #get_eust_df()
-    #Crude oil imports by field of produ
-
-
-    #maybe:
-    #Exports of oil and petroleum pro
-    
+    codes = ['nrg_cb_sffm', 'nrg_cb_oilm', 'nrg_cb_gasm', 'nrg_cb_em', 'nrg_cb_eim', 'nrg_cb_pem']
     
     datasets_dict = filter_dict_by_codes(datasets_dict, codes)
     
@@ -258,7 +217,6 @@ def get_toc():
         temp = datasets_dict[key]['title']
         toc_names += [temp,]
 
-    # Inspect the parsed data
     return datasets_dict, toc_names
 
 # -----------------------------------------------------------------------------
@@ -271,7 +229,6 @@ def get_toc():
 Browse energy data from the [eurostat Database](https://ec.europa.eu/eurostat/data/database). This data is updated monthly by eurostat and queried via API.
 '''
 
-# Add some spacing
 ''
 ''
 
@@ -402,10 +359,6 @@ with mainpage:
     filtered_descriptions_str
     
     with st.container():
-        
-        #st.write(dict_filters)
-        #st.write(dic_df)
-        #st.write(toc_df)
 
         fig_line_chart = px.line(df_filtered, x='date', y='value', color='geo', color_discrete_map=color_map, labels= {'geo': 'Country', 'value': filtered_descriptions_str, 'date': 'Date'})
         fig_line_chart.for_each_trace(lambda t: t.update(name = dic_df['geo']['pars'][t.name],
@@ -414,12 +367,9 @@ with mainpage:
                                      )
                   )
         st.plotly_chart(fig_line_chart)
-        # st.line_chart(df_filtered, x='date', y='value',color='geo')
-    
-    # Create two columns
+
     col1, col2 = st.columns(2)
     
-    # Add content to the first column
     with col1:
 
         map_date = st.slider(
@@ -434,8 +384,7 @@ with mainpage:
         
         lon_min, lon_max = -25, 42
         lat_min, lat_max = 35, 75
-        #st.header("Map")
-        #st.write(df_filtered)
+
         nuts = get_nuts()
         
         def filter_multipolygons(gdf, lon_min, lon_max, lat_min, lat_max):
@@ -466,7 +415,6 @@ with mainpage:
     
         merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
     
-        # Ensure the GeoDataFrame contains only necessary columns
         merged = merged[['CNTR_CODE', 'value', 'geometry']]
 
         if len(merged['value'].unique()) == 1 and pd.isna(merged['value'].unique()):
@@ -502,7 +450,6 @@ with mainpage:
                 labels={'value_nona': ""}
             )
             
-            # Update layout for dark theme and disable scrolling
             fig.update_geos(
                 fitbounds="locations",
                 visible=False,
@@ -513,13 +460,6 @@ with mainpage:
             fig.update_layout(
                 geo=dict(
                     bgcolor='rgba(0,0,0,0)',
-                    #showland=False,
-                    #landcolor="black",
-                    #showocean=False,
-                    #oceancolor="black",
-                    #lakecolor="black",
-                    #showcountries=False,
-                    #countrycolor="white"
                 ),
                 paper_bgcolor='rgba(0,0,0,0)',
                 plot_bgcolor='rgba(0,0,0,0)',
@@ -535,10 +475,6 @@ with mainpage:
         except:
             st.write("No country selected")
             
-            
-     
-    
-    # Add content to the second column
     with col2:
 
         monthly_mean = df_filtered
@@ -547,7 +483,6 @@ with mainpage:
 
         df_filtered['month_name'] = df_filtered['datetime'].dt.month_name()
         
-        # Group by month and calculate the mean of the 'value' column
         monthly_mean = monthly_mean.groupby(['geo', 'month', 'month_name'])['value'].mean().reset_index()
 
         line_r_range = [0.000000000000001, monthly_mean['value'].max()]
