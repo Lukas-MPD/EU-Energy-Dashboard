@@ -502,4 +502,5 @@ with mainpage:
     
     with st.container():
         f"This dataset contains data from {toc_df['dataStart']} to {toc_df['dataEnd']} and contains {toc_df['values']} values. It was updated {toc_df['lastUpdate']} and last modified {toc_df['lastModified']}. You can view the metadata [here]({toc_df['metadata']}) and download the data [here]({toc_df['downloadLink']})."
+        "You can wiew this App on Git-Hub [here](https://github.com/Lukas-MPD/EU-Energy-Dashboard)."
 
