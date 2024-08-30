@@ -1,4 +1,4 @@
-# :electric_plug: Energy in the EU :flag-eu:
+# :electric_plug: Energy in the EU 
 
 A Streamlit app showing different datasets of Energy in the EU.
 
