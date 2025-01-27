@@ -2,4 +2,4 @@
 
 A Streamlit app showing different datasets of Energy in the EU.
 
-[Open in Streamlit](https://gdp-dashboard-template-j0u45pkpe3.streamlit.app/?ref=blog.streamlit.io)
+[Open in Streamlit](https://eu-energy-dashboard.streamlit.app/)
