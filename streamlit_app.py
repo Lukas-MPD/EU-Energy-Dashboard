@@ -284,11 +284,13 @@ with sidebar:
         dict_filters.update({i: selec})
 
     countries = [value for value in dic_df['geo']['pars'].values()]
+
+    default_countries = [country for country in countries if country != "European Union - 27 countries (from 2020)"]
     
     selected_countries = st.multiselect(
         'Which countries would you like to view?',
         countries,
-        countries
+        default_countries
     )
 
     if not len(selected_countries):
@@ -374,10 +376,10 @@ with mainpage:
 
         map_date = st.slider(
             'Choose a date for the map:',
-            min_value= from_date,
-            max_value= to_date,
-            value=to_date,
-            format="YYYY-MM"
+            min_value = from_date,
+            max_value = to_date,
+            value = from_date,
+            format = "YYYY-MM"
         )
 
         map_date = map_date.replace(day=1)
