@@ -53,7 +53,7 @@ def per_capita(df):
     pop.rename(columns={'geo\\TIME_PERIOD': 'geo'}, inplace=True)
 
     for ind in df.index:
-        year = str(df.loc[ind, 'datetime'].year)
+        year = df.loc[ind, 'datetime'].year
         geo = df.loc[ind, 'geo']
         pop_filtered = pop[pop['geo'] == geo]
         
@@ -413,7 +413,7 @@ with mainpage:
             return gdf.dropna(subset=['geometry'])
         
         nuts = filter_multipolygons(nuts, lon_min, lon_max, lat_min, lat_max)
-        oneYear_df_eust = df_filtered[df_eust['date'] == map_date]
+        oneYear_df_eust = df_filtered[df_filtered['date'] == map_date]
     
         merged = nuts.merge(oneYear_df_eust, left_on='CNTR_CODE', right_on='geo')
     
@@ -473,7 +473,7 @@ with mainpage:
                 hovertext=merged['country_name'],
                 customdata=merged['value_custom']
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
         except:
             st.write("No country selected")
             
