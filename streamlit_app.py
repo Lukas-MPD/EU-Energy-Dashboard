@@ -56,19 +56,17 @@ def per_capita(df):
         year = df.loc[ind, 'datetime'].year
         geo = df.loc[ind, 'geo']
         pop_filtered = pop[pop['geo'] == geo]
-        
-        pop_val = None 
 
-        if year in pop_filtered.columns and not pop_filtered[year].empty:
-            pop_val = pop_filtered[year].iloc[0]
-        else:
-            for i in range(5):
-                year_temp = year - i - 1
-                if year_temp in pop_filtered.columns and not pop_filtered[year_temp].empty:
-                    pop_val = pop_filtered[year_temp].iloc[0]
-                    break
+        pop_val = None
 
-        if pop_val:
+
+        for candidate in range(year, year - 6, -1):
+            col = str(candidate)
+            if col in pop_filtered.columns and not pop_filtered[col].empty:
+                pop_val = pop_filtered[col].iloc[0]
+                break
+
+        if pop_val and pd.notna(pop_val):
             df.loc[ind, 'value'] = df.loc[ind, 'value'] / pop_val * 10000
         else:
             df.loc[ind, 'value'] = None
@@ -224,7 +222,7 @@ def get_toc():
 
 # Set the title that appears at the top of the page.
 '''
-# :electric_plug: Energy in the EU :flag-eu:
+# :electric_plug: Energy in the EU 🇪🇺
 
 Browse energy data from the [eurostat Database](https://ec.europa.eu/eurostat/data/database). This data is updated monthly by eurostat and queried via API.
 '''
