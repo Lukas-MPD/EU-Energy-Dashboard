@@ -338,11 +338,11 @@ with mainpage:
     color_map = {geo: px.colors.qualitative.Plotly[i % len(px.colors.qualitative.Plotly)] for i, geo in enumerate(unique_geos)}
     toc_df = toc[df_name]
 
-    try:
-        toc_df['lastUpdate'] = datetime.strptime(toc_df['lastUpdate'], '%d.%m.%Y').strftime('%Y-%m-%d')
-        toc_df['downloadLink'] = datetime.strptime(toc_df['downloadLink'], '%d.%m.%Y').strftime('%Y-%m-%d')
-    except:
-        os.write(1,b'Formating "lastUpdate" and/or "downloadLink" did not work.\n')
+    for field in ('lastUpdate', 'lastModified'):
+        try:
+            toc_df[field] = datetime.strptime(toc_df[field], '%d.%m.%Y').strftime('%Y-%m-%d')
+        except (ValueError, TypeError):
+            os.write(1, f'Formating "{field}" did not work.\n'.encode())
 
     filtered_descriptions = [
         dic_df[key]['pars'][value] 
