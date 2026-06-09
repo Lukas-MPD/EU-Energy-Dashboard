@@ -30,7 +30,7 @@ st.markdown(
 # -----------------------------------------------------------------------------
 # Declare some useful functions.
 
-@st.cache_data
+@st.cache_data(max_entries=3)
 def get_eust_data(dataframe: str, lst_vars: list):
     data = eust.get_data_df(dataframe)
 
@@ -46,7 +46,7 @@ def get_eust_data(dataframe: str, lst_vars: list):
 
     return df_melted
 
-@st.cache_data
+@st.cache_data(max_entries=3)
 def per_capita(df):
     pop = eust.get_data_df('demo_gind', filter_pars={'indic_de': 'AVG'})
     pop = pop.drop(columns=['freq', 'indic_de'])
